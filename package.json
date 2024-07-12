@@ -2,10 +2,16 @@
   "name": "wheelshare",
   "version": "1.0.0",
   "description": "a car pooling application",
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon server/src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Hemant",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.2"
+  }
 }
