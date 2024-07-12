@@ -1,0 +1,11 @@
+{
+  "name": "wheelshare",
+  "version": "1.0.0",
+  "description": "a car pooling application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hemant",
+  "license": "ISC"
+}
