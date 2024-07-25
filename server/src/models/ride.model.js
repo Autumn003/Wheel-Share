@@ -34,6 +34,10 @@ const rideSchema = new Schema(
       required: true,
       min: 1,
     },
+    vihcleType: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
