@@ -1,1 +1,1 @@
-export const DB_NAME = "Wheel Share";
+export const DB_NAME = "wheelShare";
