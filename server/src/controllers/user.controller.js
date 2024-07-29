@@ -137,7 +137,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     validateBeforeSave: false,
   });
 
-  const resetUrl = `${req.protocol}://${req.get("host")}/api/users/reset-password/${resetToken}`;
+  const resetUrl = `${req.protocol}://${req.get("host")}/api/users/reset-password/${resetToken}`; //onlty for testing purpose delete while you have frontend url
+  // const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a reset ypur passwor here: \n\n ${resetUrl} \n\n If you has not make the reset password request, Ignore this email.`;
 
@@ -231,6 +232,85 @@ const updateAvatar = asyncHandler(async (req, res) => {
   }
 });
 
+// get user details
+const getuserDetails = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User details fetched"));
+});
+
+// update password
+const updatePassword = asyncHandler(async (req, res) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
+
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    throw new ApiError(400, "All fields are required");
+  }
+
+  const user = await User.findById(req.user._id).select("+password");
+  if (!user) {
+    throw new ApiError(404, "User not found");
+  }
+
+  const isPasswordMatch = await user.comparePassword(oldPassword);
+  if (!isPasswordMatch) {
+    throw new ApiError(400, "Old password is incorrect");
+  }
+
+  if (newPassword !== confirmPassword) {
+    throw new ApiError(400, "Password does not match");
+  }
+
+  user.password = newPassword;
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password updated successfully"));
+});
+
+// update user details
+const updateUserDetails = asyncHandler(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  const user = await User.findById(req.user._id).select("+password");
+  if (!user) {
+    throw new ApiError(404, "user not found");
+  }
+
+  const updateData = {};
+  if (name) updateData.name = name;
+  if (email) {
+    if (!password) {
+      throw new ApiError(400, "password is required to update email");
+    }
+
+    const isPasswordMatch = await user.comparePassword(password);
+    if (!isPasswordMatch) {
+      throw new ApiError(401, "Incorrect password");
+    }
+
+    updateData.email = email;
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(req.user._id, updateData, {
+      new: true,
+    });
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    return res
+      .status(200)
+      .json(new ApiResponse(400, user, "User details updated successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Failed to update user details");
+  }
+});
+
 export {
   registerUser,
   loginUser,
@@ -238,4 +318,7 @@ export {
   forgotPassword,
   resetPassword,
   updateAvatar,
+  getuserDetails,
+  updatePassword,
+  updateUserDetails,
 };
