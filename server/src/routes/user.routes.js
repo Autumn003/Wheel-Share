@@ -5,9 +5,11 @@ import {
   logoutUser,
   forgotPassword,
   resetPassword,
+  updateAvatar,
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
@@ -19,5 +21,8 @@ router.route("/reset-password/:token").put(resetPassword);
 // secured routes
 
 router.route("/logout").post(verifyJWT, logoutUser);
+router
+  .route("/update-avatar")
+  .put(verifyJWT, upload.single("avatar"), updateAvatar);
 
 export default router;

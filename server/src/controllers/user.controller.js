@@ -4,6 +4,8 @@ import ApiResponse from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import crypto from "crypto";
 import sendEmail from "../utils/sendEmail.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
 
 const generateAccessAndRefreshToken = async (userId) => {
   try {
@@ -97,7 +99,7 @@ const loginUser = asyncHandler(async (req, res) => {
     );
 });
 
-// logoutUser
+// logout User
 const logoutUser = asyncHandler(async (req, res) => {
   User.findByIdAndUpdate(
     req.user._id,
@@ -191,4 +193,49 @@ const resetPassword = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, "Password reset successful"));
 });
 
-export { registerUser, loginUser, logoutUser, forgotPassword, resetPassword };
+// update avatar
+const updateAvatar = asyncHandler(async (req, res) => {
+  const avatarImageLocalPath = req.file?.path;
+
+  if (!avatarImageLocalPath) {
+    throw new ApiError(400, "Avatar image file is missing");
+  }
+
+  const avatar = await uploadOnCloudinary(avatarImageLocalPath);
+
+  if (!avatar) {
+    throw new ApiError(500, "Failed to upload avatar image");
+  }
+
+  try {
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      throw new ApiError(404, "User not found");
+    }
+
+    // Delete the old avatar from Cloudinary if it exists
+    if (user.avatar) {
+      const publicId = user.avatar.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(`wheelShare/avatars/${publicId}`);
+    }
+
+    user.avatar = avatar.secure_url;
+    await user.save();
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, user, "Avatar updated successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Failed to update user avatar");
+  }
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  forgotPassword,
+  resetPassword,
+  updateAvatar,
+};

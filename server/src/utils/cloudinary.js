@@ -1,5 +1,8 @@
+import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
+
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -15,8 +18,11 @@ const uploadOnCloudinary = async (localPath) => {
     }
     const response = await cloudinary.uploader.upload(localPath, {
       resource_type: "auto",
+      folder: "wheelShare/avatars",
+      width: 550,
+      crop: "scale",
     });
-    console.log("file successfully uploaded on cloudinary", response);
+    console.log("file successfully uploaded on cloudinary");
     fs.unlinkSync(localPath);
 
     return response;
