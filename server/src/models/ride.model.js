@@ -1,5 +1,4 @@
 import mongoose, { Schema } from "mongoose";
-import { trim } from "validator";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const rideSchema = new Schema(
@@ -34,7 +33,7 @@ const rideSchema = new Schema(
       required: true,
       min: 1,
     },
-    vihcleType: {
+    vehicleType: {
       type: String,
       required: true,
     },
