@@ -9,6 +9,9 @@ import {
   getuserDetails,
   updatePassword,
   updateUserDetails,
+  getUserRideHistory,
+  addRideToHistory,
+  deleteRideFromHistory,
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -31,5 +34,8 @@ router
 router.route("/profile").get(verifyJWT, getuserDetails);
 router.route("/update-password").put(verifyJWT, updatePassword);
 router.route("/update-user").put(verifyJWT, updateUserDetails);
+router.route("/rides-history").get(verifyJWT, getUserRideHistory);
+router.route("/rides-history").post(verifyJWT, addRideToHistory);
+router.route("/rides-history").delete(verifyJWT, deleteRideFromHistory);
 
 export default router;
