@@ -137,4 +137,209 @@ const searchRide = asyncHandler(async (req, res) => {
   }
 });
 
-export { createRide, getRideDetails, searchRide };
+// update ride by driver
+const updateRide = asyncHandler(async (req, res) => {
+  const { rideId } = req.params;
+  const userId = req.user._id;
+
+  const {
+    source,
+    destination,
+    departureTime,
+    availableSeats,
+    vehicleType,
+    price,
+    additionalInfo,
+  } = req.body;
+
+  const ride = await Ride.findById(rideId);
+  if (!ride) {
+    throw new ApiError(404, "Ride not found");
+  }
+
+  // check if user is creator of ride
+  if (ride?.driver.toString() !== userId.toString()) {
+    throw new ApiError(4031, "You are not authorized to update this ride");
+  }
+
+  // Validate departureTime: must be in the future
+  if (departureTime && new Date(departureTime) <= new Date()) {
+    throw new ApiError(400, "Departure time must be in the future");
+  }
+
+  // Validate vehicleType: must be one of the allowed options
+  const allowedVehicleTypes = ["mini", "sedan", "suv"];
+  if (vehicleType && !allowedVehicleTypes.includes(vehicleType.toLowerCase())) {
+    throw new ApiError(
+      400,
+      `Vehicle type must be one of the following: ${allowedVehicleTypes.join(", ")}`
+    );
+  }
+
+  // Validate price: must be a positive number
+  if (price && price <= 0) {
+    throw new ApiError(400, "Price must be a positive number.");
+  }
+
+  // update ride with new details
+  ride.source = source || ride.source;
+  ride.destination = destination || ride.destination;
+  ride.departureTime = departureTime || ride.departureTime;
+  ride.availableSeats =
+    availableSeats !== undefined ? availableSeats : ride.availableSeats;
+  ride.vehicleType = vehicleType ? vehicleType.toLowerCase() : ride.vehicleType;
+  ride.price = price !== undefined ? price : ride.price;
+  ride.additionalInfo = additionalInfo || ride.additionalInfo;
+
+  try {
+    const updatedRide = await ride.save({ validateBeforeSave: false });
+    res
+      .status(200)
+      .json(new ApiResponse(200, updatedRide, "Ride updated successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Failed to update ride");
+  }
+});
+
+// delete ride by driver
+const deleteRide = asyncHandler(async (req, res) => {
+  const { rideId } = req.params;
+  const userId = req.user.id;
+
+  const ride = await Ride.findById(rideId);
+  if (!ride) {
+    throw new ApiError(404, "Ride not found");
+  }
+
+  if (ride?.driver.toString() !== userId.toString()) {
+    throw new ApiError(401, "You are not authorized to delete this ride");
+  }
+
+  await ride.deleteOne();
+  res.status(200).json(new ApiResponse(200, null, "Ride deleted successfully"));
+});
+
+// Join a ride
+const joinRide = asyncHandler(async (req, res) => {
+  const { rideId } = req.params;
+  const userId = req.user.id;
+  const { seatsToBook } = req.body;
+
+  const ride = await Ride.findById(rideId);
+  if (!ride) {
+    throw new ApiError(404, "Ride not found");
+  }
+
+  if (ride.availableSeats <= 0) {
+    throw new ApiError(400, "Ride is fully booked");
+  }
+
+  if (seatsToBook <= 0 || seatsToBook > ride.availableSeats) {
+    throw new ApiError(
+      400,
+      `you can book minimum 1 and maximum ${ride.availableSeats} seats`
+    );
+  }
+
+  const existingRider = await ride.riders.find(
+    (rider) => rider.rider.toString() === userId.toString()
+  );
+  if (existingRider) {
+    throw new ApiError(400, "You are already booked for this ride");
+  }
+
+  ride.riders.push({ rider: userId, bookedSeats: seatsToBook });
+  if (ride.availableSeats - seatsToBook >= 0) {
+    ride.availableSeats -= seatsToBook;
+  }
+
+  await ride.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, ride, "Ride joined successfully"));
+});
+
+// leave a joined ride
+const leaveRide = asyncHandler(async (req, res) => {
+  const { rideId } = req.params;
+  const userId = req.user.id;
+
+  const ride = await Ride.findById(rideId);
+  if (!ride) {
+    throw new ApiError(404, "Ride not found");
+  }
+
+  const riderIndex = ride.riders.findIndex(
+    (rider) => rider.rider.toString() === userId.toString()
+  );
+  if (riderIndex === -1) {
+    throw new ApiError(400, "You are not booked for this ride");
+  }
+
+  const bookedSeats = ride.riders[riderIndex].bookedSeats;
+  ride.riders.splice(riderIndex, 1);
+
+  ride.availableSeats += bookedSeats;
+
+  await ride.save();
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, null, "Ride leaved successfully"));
+});
+
+// update the number of seats booked
+const updateSeats = asyncHandler(async (req, res) => {
+  const { rideId } = req.params;
+  const userId = req.user.id;
+  const { newSeatsToBook } = req.body;
+
+  if (!newSeatsToBook || newSeatsToBook < 1) {
+    throw new ApiError(400, "The number of seats to book must be at least 1");
+  }
+
+  const ride = await Ride.findById(rideId);
+  if (!ride) {
+    throw new ApiError(404, "Ride not found");
+  }
+
+  // Check if the user has joined the ride
+  const riderIndex = ride.riders.findIndex(
+    (rider) => rider.rider.toString() === userId.toString()
+  );
+  if (riderIndex === -1) {
+    throw new ApiError(400, "You are not booked for this ride");
+  }
+
+  const preveousSeatsBooked = ride.riders[riderIndex].bookedSeats;
+
+  const seatsDiffrence = newSeatsToBook - preveousSeatsBooked;
+
+  if (seatsDiffrence > 0 && ride.availableSeats < seatsDiffrence) {
+    throw new ApiError(
+      400,
+      `only ${ride.availableSeats} seats are available to book`
+    );
+  }
+
+  ride.riders[riderIndex].bookedSeats = newSeatsToBook;
+
+  ride.availableSeats -= seatsDiffrence;
+
+  await ride.save();
+  return res
+    .status(200)
+    .json(new ApiResponse(200, ride, "Seats updated successfully"));
+});
+
+export {
+  createRide,
+  getRideDetails,
+  searchRide,
+  updateRide,
+  deleteRide,
+  joinRide,
+  leaveRide,
+  updateSeats,
+};

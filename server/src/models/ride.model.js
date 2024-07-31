@@ -10,8 +10,8 @@ const rideSchema = new Schema(
     },
     riders: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        rider: { type: Schema.Types.ObjectId, ref: "User" },
+        bookedSeats: { type: Number, required: true, min: 1 },
       },
     ],
     source: {
@@ -31,7 +31,6 @@ const rideSchema = new Schema(
     availableSeats: {
       type: Number,
       required: true,
-      min: 1,
     },
     vehicleType: {
       type: String,
