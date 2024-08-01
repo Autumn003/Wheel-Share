@@ -142,15 +142,8 @@ const updateRide = asyncHandler(async (req, res) => {
   const { rideId } = req.params;
   const userId = req.user._id;
 
-  const {
-    source,
-    destination,
-    departureTime,
-    availableSeats,
-    vehicleType,
-    price,
-    additionalInfo,
-  } = req.body;
+  const { departureTime, availableSeats, vehicleType, price, additionalInfo } =
+    req.body;
 
   const ride = await Ride.findById(rideId);
   if (!ride) {
@@ -182,8 +175,6 @@ const updateRide = asyncHandler(async (req, res) => {
   }
 
   // update ride with new details
-  ride.source = source || ride.source;
-  ride.destination = destination || ride.destination;
   ride.departureTime = departureTime || ride.departureTime;
   ride.availableSeats =
     availableSeats !== undefined ? availableSeats : ride.availableSeats;
