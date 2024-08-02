@@ -14,16 +14,22 @@ const rideSchema = new Schema(
         bookedSeats: { type: Number, required: true, min: 1 },
       },
     ],
+
     source: {
-      type: String,
-      required: true,
-      trim: true,
+      name: { type: String, required: true },
+      coordinates: {
+        type: [Number], // [lng, lat] format
+        required: true,
+      },
     },
     destination: {
-      type: String,
-      required: true,
-      trim: true,
+      name: { type: String, required: true },
+      coordinates: {
+        type: [Number], // [lng, lat] format
+        required: true,
+      },
     },
+
     departureTime: {
       type: Date,
       required: true,
@@ -41,7 +47,7 @@ const rideSchema = new Schema(
       required: true,
       min: 0,
     },
-    aditionalInfo: {
+    additionalInfo: {
       type: String,
       trim: true,
     },
@@ -52,5 +58,7 @@ const rideSchema = new Schema(
 );
 
 rideSchema.plugin(mongooseAggregatePaginate);
+rideSchema.index({ "source.coordinates": "2dsphere" }); // to use geoNear in controller
+rideSchema.index({ "destination.coordinates": "2dsphere" });
 
 export const Ride = mongoose.model("Ride", rideSchema);

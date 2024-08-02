@@ -6,8 +6,12 @@ import asyncHandler from "../utils/asyncHandler.js";
 // create ride
 const createRide = asyncHandler(async (req, res) => {
   const {
-    source,
-    destination,
+    sourceName,
+    destinationName,
+    sourceLat,
+    sourceLng,
+    destinationLat,
+    destinationLng,
     departureTime,
     availableSeats,
     vehicleType,
@@ -15,10 +19,14 @@ const createRide = asyncHandler(async (req, res) => {
     additionalInfo,
   } = req.body;
 
-  // Check for missing required fields
+  // Validate required fields and data
   if (
-    !source ||
-    !destination ||
+    !sourceName ||
+    !sourceLat ||
+    !sourceLng ||
+    !destinationName ||
+    !destinationLat ||
+    !destinationLng ||
     !departureTime ||
     !availableSeats ||
     !vehicleType ||
@@ -27,12 +35,10 @@ const createRide = asyncHandler(async (req, res) => {
     throw new ApiError(400, "All required fields must be filled.");
   }
 
-  // Validate departureTime: must be in the future
   if (new Date(departureTime) <= new Date()) {
     throw new ApiError(400, "Departure time must be in the future");
   }
 
-  // Validate vehicleType: must be one of the allowed options
   const allowedVehicleTypes = ["mini", "sedan", "suv"];
   if (!allowedVehicleTypes.includes(vehicleType.toLowerCase())) {
     throw new ApiError(
@@ -41,7 +47,6 @@ const createRide = asyncHandler(async (req, res) => {
     );
   }
 
-  // Validate price: must be a positive number
   if (price <= 0) {
     throw new ApiError(400, "Price must be a positive number.");
   }
@@ -54,8 +59,14 @@ const createRide = asyncHandler(async (req, res) => {
   try {
     const ride = await Ride.create({
       driver: userId,
-      source,
-      destination,
+      source: {
+        name: sourceName,
+        coordinates: [parseFloat(sourceLng), parseFloat(sourceLat)],
+      },
+      destination: {
+        name: destinationName,
+        coordinates: [parseFloat(destinationLng), parseFloat(destinationLat)],
+      },
       departureTime,
       availableSeats,
       vehicleType: vehicleType.toLowerCase(),
@@ -92,48 +103,100 @@ const getRideDetails = asyncHandler(async (req, res) => {
   }
 });
 
-// search rides
+// search ride
 const searchRide = asyncHandler(async (req, res) => {
-  const { source, destination, departureTime, availableSeats } = req.query;
+  const {
+    sourceLat,
+    sourceLng,
+    destinationLat,
+    destinationLng,
+    searchDate,
+    miniAvailableSeats,
+  } = req.body;
 
-  if (!source || !destination || !departureTime) {
-    throw new ApiError(400, "* Fields are required");
+  if (
+    !sourceLat ||
+    !sourceLng ||
+    !destinationLat ||
+    !destinationLng ||
+    !searchDate
+  ) {
+    throw new ApiError(400, "Missing required fields");
   }
 
-  const searchDepartureTime = new Date(departureTime);
+  const minSeats = miniAvailableSeats || 1;
 
-  if (isNaN(searchDepartureTime.getTime())) {
-    throw new ApiError(400, "Invalid departure time format.");
-  }
+  // Convert searchDate to ISODate
+  const startOfDay = new Date(`${searchDate}T00:00:00.000Z`);
+  const endOfDay = new Date(`${searchDate}T23:59:59.999Z`);
 
-  const query = {
-    source: { $regex: source, $options: "i" },
-    destination: { $regex: destination, $options: "i" },
-    departureTime: { $regex: departureTime, $options: "i" },
-    departureTime: { $gte: searchDepartureTime },
-  };
-
-  if (availableSeats) {
-    const seats = parseInt(availableSeats, 10);
-    if (isNaN(seats) || seats < 0) {
-      throw new ApiError(400, "Available seats must be a positive number.");
-    }
-    query.availableSeats = { $gte: seats };
-  }
+  const maxDistance = 20000; // 20 km in meters
 
   try {
-    const rides = await Ride.find(query).populate("driver", "name email");
+    // Find rides near the source location within 20 km
+    const sourceRides = await Ride.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [parseFloat(sourceLng), parseFloat(sourceLat)],
+          },
+          distanceField: "dist.calculated",
+          maxDistance: maxDistance,
+          spherical: true,
+          key: "source.coordinates",
+        },
+      },
+      {
+        $match: {
+          departureTime: { $gte: startOfDay, $lte: endOfDay },
+          availableSeats: { $gte: minSeats },
+        },
+      },
+    ]);
 
-    if (!rides) {
-      throw new ApiError(404, "No rides found");
+    // Find rides near the destination location within 20 km
+    const destinationRides = await Ride.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: "Point",
+            coordinates: [
+              parseFloat(destinationLng),
+              parseFloat(destinationLat),
+            ],
+          },
+          distanceField: "dist.calculated",
+          maxDistance: maxDistance,
+          spherical: true,
+          key: "destination.coordinates",
+        },
+      },
+      {
+        $match: {
+          departureTime: { $gte: startOfDay, $lte: endOfDay },
+          availableSeats: { $gte: minSeats },
+        },
+      },
+    ]);
+
+    // Find common rides based on ride IDs
+    const commonRideIds = new Set(
+      destinationRides.map((ride) => ride._id.toString())
+    );
+    const rides = sourceRides.filter((ride) =>
+      commonRideIds.has(ride._id.toString())
+    );
+
+    if (!rides.length) {
+      return res.status(404).json(new ApiResponse(404, null, "No rides found"));
     }
 
     return res
       .status(200)
-      .json(new ApiResponse(200, rides, "Rides found successfully"));
+      .json(new ApiResponse(200, rides, "Rides fetched successfully"));
   } catch (error) {
-    console.log("error to find rides", error);
-    throw new ApiError(500, "Failed, to retrieve rides");
+    throw new ApiError(500, "Failed to fetch rides");
   }
 });
 
