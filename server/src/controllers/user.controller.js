@@ -312,11 +312,9 @@ const updateUserDetails = asyncHandler(async (req, res) => {
 });
 
 // add rides to history
-const addRideToHistory = asyncHandler(async (req, res) => {
-  const { rideId } = req.body;
-
+const addRideToHistory = asyncHandler(async (req, _, rideId) => {
   try {
-    const user = User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
     if (!user) {
       throw new ApiError(404, "User not found");
     }
@@ -325,29 +323,21 @@ const addRideToHistory = asyncHandler(async (req, res) => {
       throw new ApiError(400, "Ride Id is required");
     }
 
-    user.ridesHistory.push(rideId);
-    await user.save({ validateBeforeSave: false });
-
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          user.ridesHistory,
-          "Ride add to history successfully"
-        )
-      );
+    if (!user.ridesHistory.includes(rideId)) {
+      user.ridesHistory.push(rideId);
+      await user.save({ validateBeforeSave: false });
+    }
   } catch (error) {
+    console.log(error);
+
     throw new ApiError(500, "Failed to add ride to history");
   }
 });
 
 // delete ride from history
-const deleteRideFromHistory = asyncHandler(async (req, res) => {
-  const { rideId } = req.body;
-
+const deleteRideFromHistory = asyncHandler(async (req, _, rideId) => {
   try {
-    const user = User.findById(req.user._id);
+    const user = await User.findById(req.user._id);
     if (!user) {
       throw new ApiError(404, "User not found");
     }
@@ -356,18 +346,10 @@ const deleteRideFromHistory = asyncHandler(async (req, res) => {
       throw new ApiError(400, "Ride Id is required");
     }
 
-    user.ridesHistory.pull(rideId);
-    await user.save({ validateBeforeSave: false });
-
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          user.ridesHistory,
-          "Ride deleted from history successfully"
-        )
-      );
+    if (user.ridesHistory.includes(rideId)) {
+      user.ridesHistory.pull(rideId);
+      await user.save({ validateBeforeSave: false });
+    }
   } catch (error) {
     throw new ApiError(500, "Failed to remove ride from history");
   }

@@ -2,6 +2,7 @@ import { Ride } from "../models/ride.model.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import asyncHandler from "../utils/asyncHandler.js";
+import { addRideToHistory, deleteRideFromHistory } from "./user.controller.js";
 
 // create ride
 const createRide = asyncHandler(async (req, res) => {
@@ -307,11 +308,15 @@ const joinRide = asyncHandler(async (req, res) => {
     ride.availableSeats -= seatsToBook;
   }
 
-  await ride.save();
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, ride, "Ride joined successfully"));
+  try {
+    await ride.save();
+    addRideToHistory(req, res, rideId);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, ride, "Ride joined successfully"));
+  } catch (error) {
+    throw new ApiError(500, "Failed to join ride");
+  }
 });
 
 // leave a joined ride
@@ -336,11 +341,15 @@ const leaveRide = asyncHandler(async (req, res) => {
 
   ride.availableSeats += bookedSeats;
 
-  await ride.save();
-
-  return res
-    .status(200)
-    .json(new ApiResponse(200, null, "Ride leaved successfully"));
+  try {
+    await ride.save();
+    deleteRideFromHistory(req, res, rideId);
+    return res
+      .status(200)
+      .json(new ApiResponse(200, null, "Ride leaved successfully"));
+  } catch (error) {
+    throw new ApiError(500, "failed to leave ride");
+  }
 });
 
 // update the number of seats booked
