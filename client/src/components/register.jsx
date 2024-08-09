@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../actions/user.action.js";
+import { Button } from "./ui/button.jsx";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -104,12 +105,9 @@ const Register = () => {
             />
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 px-4 rounded shadow-md hover:bg-blue-600"
-          >
+          <Button type="submit" className="w-full py-2 px-4 rounded shadow-md ">
             Register
-          </button>
+          </Button>
         </form>
         {user && (
           <p className="mt-4 text-green-500">User registered successfully</p>
