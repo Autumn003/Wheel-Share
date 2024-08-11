@@ -1,32 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// register new user
-export const registerUser = createAsyncThunk(
-  "user/register",
-  async (userData, { rejectWithValue }) => {
-    try {
-      const response = await axios.post("/api/v1/user/register", userData);
-      const loginResponse = await axios.post("/api/v1/user/login", {
-        email: userData.email,
-        password: userData.password,
-      });
-      console.log(loginResponse.data);
-
-      dispatch(loginUser(loginResponse.data));
-
-      return response.data.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        console.log(error.response.data);
-        return rejectWithValue(error.response.data.message); // Capture the error message from the backend
-      } else {
-        return rejectWithValue("An unexpected error occurred");
-      }
-    }
-  }
-);
-
 // login user
 export const loginUser = createAsyncThunk(
   "user/login",
@@ -36,8 +10,24 @@ export const loginUser = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
-        console.log(error.response.data);
-        return rejectWithValue(error.response.data.message); // Capture the error message from the backend
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+// register
+export const registerUser = createAsyncThunk(
+  "user/register",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/v1/user/register", userData);
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An unexpected error occurred");
       }
@@ -54,8 +44,25 @@ export const getUserDetails = createAsyncThunk(
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
-        console.log(error.response.data);
-        return rejectWithValue(error.response.data.message); // Capture the error message from the backend
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+// logout user
+
+export const logoutUser = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/v1/user/logout");
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue("An unexpected error occurred");
       }

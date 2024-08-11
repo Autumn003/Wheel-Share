@@ -12,13 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { registerUser } from "../../actions/user.action.js";
+import { loginUser, registerUser } from "../../actions/user.action.js";
 import { resetUserError } from "../../slices/user.slice.js";
 
 const Register = ({ isOpen, onOpenChange }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, userInfo } = useSelector((state) => state.user);
+  const { loading, error, user } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -34,7 +34,7 @@ const Register = ({ isOpen, onOpenChange }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
@@ -42,21 +42,30 @@ const Register = ({ isOpen, onOpenChange }) => {
       return;
     }
 
-    dispatch(
+    const resultAction = await dispatch(
       registerUser({
         name: formData.name,
         email: formData.email,
         password: formData.password,
       })
     );
+
+    if (registerUser.fulfilled.match(resultAction)) {
+      dispatch(
+        loginUser({
+          email: formData.email,
+          password: formData.password,
+        })
+      );
+    }
   };
 
   useEffect(() => {
-    if (userInfo) {
+    if (user) {
       navigate("/");
       onOpenChange(false);
     }
-  }, [userInfo, navigate, onOpenChange]);
+  }, [user, navigate, onOpenChange]);
 
   const handleDialogClose = () => {
     onOpenChange(false);

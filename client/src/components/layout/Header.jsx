@@ -8,13 +8,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-// import Register from "@/components/Register"; // Update the path if needed
 import Register from "../user/Register.jsx";
-import Login from "../user/Login";
+import Login from "../user/Login.jsx";
+import Logout from "../user/Logout.jsx";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
+  // const handleLogout = () => {
+  //   dispatch(logoutUser());
+  // };
 
   return (
     <>
@@ -26,18 +36,31 @@ const Header = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="link" size="icon">
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage
+                    src={user?.avatar || "https://github.com/shadcn.png"}
+                  />
                   <AvatarFallback>Profile</AvatarFallback>
                 </Avatar>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setIsRegisterOpen(true)}>
-                SignUp
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsLoginOpen(true)}>
-                Login
-              </DropdownMenuItem>
+              {user ? (
+                <>
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsLogoutOpen(true)}>
+                    Logout
+                  </DropdownMenuItem>
+                </>
+              ) : (
+                <>
+                  <DropdownMenuItem onClick={() => setIsRegisterOpen(true)}>
+                    SignUp
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setIsLoginOpen(true)}>
+                    Login
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -48,6 +71,7 @@ const Header = () => {
 
       {/* You can duplicate the Register component if you have a separate Login dialog component */}
       <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
+      <Logout isOpen={isLogoutOpen} onOpenChange={setIsLogoutOpen} />
     </>
   );
 };

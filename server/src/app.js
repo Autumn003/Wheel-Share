@@ -1,6 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import cors from "cors";
+import errorHandler from "./utils/errorHandler.js";
 
 const app = express();
 
@@ -25,5 +26,7 @@ import messageRouter from "./routes/message.routes.js";
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/ride", rideRouter);
 app.use("/api/v1/message", messageRouter);
+
+app.use(errorHandler);
 
 export { app };
