@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -16,11 +15,10 @@ import { logoutUser } from "../../actions/user.action.js";
 
 const Logout = ({ isOpen, onOpenChange }) => {
   const dispatch = useDispatch();
-  // const [isOpen, onOpenChange] = useState(false);
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    onOpenChange(false); // Close the dialog after logout
+    onOpenChange(false);
   };
 
   const closeDialog = () => {
@@ -35,7 +33,7 @@ const Logout = ({ isOpen, onOpenChange }) => {
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Logout</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to logout? This action cannot be undone.
+              Are you sure you want to logout?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

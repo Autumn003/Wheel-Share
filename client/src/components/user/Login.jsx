@@ -50,13 +50,6 @@ const Login = ({ isOpen, onOpenChange }) => {
     }
   }, [user, navigate, onOpenChange]);
 
-  const handleDialogClose = () => {
-    onOpenChange(false);
-    if (error) {
-      dispatch(resetUserError());
-    }
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">

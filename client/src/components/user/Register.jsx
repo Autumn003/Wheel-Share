@@ -38,7 +38,8 @@ const Register = ({ isOpen, onOpenChange }) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
-      alert("Passwords do not match!");
+      alert("password does not match");
+
       return;
     }
 
@@ -132,7 +133,6 @@ const Register = ({ isOpen, onOpenChange }) => {
               </Label>
               <Input
                 id="confirmPassword"
-                type="password"
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="Confirm your password"
