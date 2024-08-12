@@ -12,19 +12,16 @@ import Register from "../user/Register.jsx";
 import Login from "../user/Login.jsx";
 import Logout from "../user/Logout.jsx";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const user = useSelector((state) => state.user.user);
-  console.log(user);
-
-  // const handleLogout = () => {
-  //   dispatch(logoutUser());
-  // };
 
   return (
     <>
@@ -46,7 +43,9 @@ const Header = () => {
             <DropdownMenuContent align="end">
               {user ? (
                 <>
-                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("profile")}>
+                    Profile
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setIsLogoutOpen(true)}>
                     Logout
                   </DropdownMenuItem>
@@ -66,10 +65,8 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Register Dialog */}
+      {/* Dialogs */}
       <Register isOpen={isRegisterOpen} onOpenChange={setIsRegisterOpen} />
-
-      {/* You can duplicate the Register component if you have a separate Login dialog component */}
       <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />
       <Logout isOpen={isLogoutOpen} onOpenChange={setIsLogoutOpen} />
     </>

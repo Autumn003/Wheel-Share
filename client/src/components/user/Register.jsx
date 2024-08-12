@@ -62,7 +62,7 @@ const Register = ({ isOpen, onOpenChange }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (isOpen && user) {
       navigate("/");
       onOpenChange(false);
     }

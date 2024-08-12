@@ -44,7 +44,7 @@ const Login = ({ isOpen, onOpenChange }) => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (isOpen && user) {
       navigate("/");
       onOpenChange(false);
     }
