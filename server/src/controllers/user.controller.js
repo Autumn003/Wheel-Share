@@ -378,6 +378,41 @@ const getUserRideHistory = asyncHandler(async (req, res) => {
   }
 });
 
+// Refresh access token using refresh token
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    throw new ApiError(401, "Tokens may expired, please log in again");
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded._id);
+
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new ApiError(401, "Invalid credentials please log in again");
+    }
+
+    const accessToken = user.generateAccessToken();
+
+    const options = {
+      httpOnly: true,
+      secure: true,
+    };
+
+    return res
+      .status(200)
+      .cookie("accessToken", accessToken, options)
+      .json(new ApiResponse(200, {}, "Access token refreshed successfully"));
+  } catch (error) {
+    throw new ApiError(
+      403,
+      "Refresh token expired or invalid, please log in again"
+    );
+  }
+});
+
 export {
   registerUser,
   loginUser,
@@ -391,4 +426,5 @@ export {
   addRideToHistory,
   deleteRideFromHistory,
   getUserRideHistory,
+  refreshAccessToken,
 };

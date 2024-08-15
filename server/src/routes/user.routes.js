@@ -12,6 +12,7 @@ import {
   getUserRideHistory,
   addRideToHistory,
   deleteRideFromHistory,
+  refreshAccessToken,
 } from "../controllers/user.controller.js";
 
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -23,6 +24,7 @@ router.route("/register").post(registerUser);
 router.route("/login").post(loginUser);
 router.route("/forgot-password").post(forgotPassword);
 router.route("/reset-password/:token").put(resetPassword);
+router.route("/refresh-token").get(refreshAccessToken);
 
 // secured routes
 
