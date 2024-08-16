@@ -57,20 +57,26 @@ export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v1/user/profile");
+      const response = await axios.get("/api/v1/user/profile", {
+        withCredentials: true,
+      });
       return response.data.data;
     } catch (error) {
-      if (error.response.status === 401) {
+      if (error.response && error.response.status === 401) {
         // If access token is expired, try refreshing it
         try {
-          await axios.get("/api/v1/user/refresh-token");
+          await axios.get("/api/v1/user/refresh-token", {
+            withCredentials: true,
+          });
 
           // Retry fetching user details with the new token
-          const retryResponse = await axios.get("/api/v1/user/profile");
+          const retryResponse = await axios.get("/api/v1/user/profile", {
+            withCredentials: true,
+          });
           return retryResponse.data.data;
         } catch (refreshError) {
           // If refreshing fails, log out the user
-          dispatch(logoutUser());
+          // dispatch(logoutUser());
           return rejectWithValue("Session expired, please log in again");
         }
       } else {
@@ -79,20 +85,3 @@ export const fetchUser = createAsyncThunk(
     }
   }
 );
-
-// //get user details
-// export const getUserDetails = createAsyncThunk(
-//   "user/getUserDetails",
-//   async (id, { rejectWithValue }) => {
-//     try {
-//       const response = await axios.get(`/api/v1/user/${id}`);
-//       return response.data.data;
-//     } catch (error) {
-//       if (error.response && error.response.data) {
-//         return rejectWithValue(error.response.data.message);
-//       } else {
-//         return rejectWithValue("An unexpected error occurred");
-//       }
-//     }
-//   }
-// );

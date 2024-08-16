@@ -1,17 +1,16 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { useDispatch } from "react-redux";
 
 import { fetchUser } from "./actions/user.action.js";
 
 import { Header, Home, Profile } from "./components/index.js";
 
-function App() {
-  const dispatch = useDispatch();
+import store from "./strore/store.js";
 
+function App() {
   useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
+    store.dispatch(fetchUser());
+  }, []);
 
   return (
     <Router>

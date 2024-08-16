@@ -27,15 +27,13 @@ const Header = () => {
     <>
       <div className="h-20 sticky top-0 z-50 flex justify-between p-4 items-center bg-[rgba(0,0,0,0.50)] shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[6.8px]">
         <div> Wheel Share </div>
-        <div className="flex justify-between w-[50%]">
+        <div className="flex justify-end space-x-4 w-[50%]">
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="link" size="icon">
                 <Avatar>
-                  <AvatarImage
-                    src={user?.avatar || "https://github.com/shadcn.png"}
-                  />
+                  <AvatarImage src={user?.avatar || "Profile.png"} />
                   <AvatarFallback>Profile</AvatarFallback>
                 </Avatar>
               </Button>
