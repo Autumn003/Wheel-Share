@@ -3,6 +3,7 @@ import {
   fetchUser,
   forgetPassword,
   registerUser,
+  resetPassword,
 } from "../actions/user.action";
 import { loginUser } from "../actions/user.action";
 import { logoutUser } from "../actions/user.action";
@@ -89,7 +90,28 @@ const userSlice = createSlice({
         state.error = action.payload;
         toast({
           variant: "destructive",
-          description: action.payload, // Show the error message
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        toast({
+          title: "Password updated",
+          description:
+            "password updated successfully, login with new password.",
+          status: "success",
+        });
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast({
+          variant: "destructive",
+          description: action.payload,
           status: "error",
         });
       });

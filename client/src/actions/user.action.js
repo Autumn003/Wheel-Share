@@ -99,3 +99,16 @@ export const forgetPassword = createAsyncThunk(
     }
   }
 );
+
+// reset password
+export const resetPassword = createAsyncThunk(
+  "user/resetPassword",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`/api/v1/user/reset-password/${token}`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
