@@ -6,6 +6,7 @@ import {
 } from "../actions/user.action";
 import { loginUser } from "../actions/user.action";
 import { logoutUser } from "../actions/user.action";
+import { toast } from "@/components/ui/use-toast";
 
 const userSlice = createSlice({
   name: "user",
@@ -75,12 +76,22 @@ const userSlice = createSlice({
       })
       .addCase(forgetPassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        state.user = null;
         state.error = null;
+        toast({
+          title: "Password Reset Email Sent",
+          description: "Check your email to reset your password.",
+          status: "success",
+        });
       })
       .addCase(forgetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        toast({
+          variant: "destructive",
+          description: action.payload, // Show the error message
+          status: "error",
+        });
       });
   },
 });

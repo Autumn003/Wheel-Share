@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -15,9 +16,10 @@ import { logoutUser } from "../../actions/user.action.js";
 
 const Logout = ({ isOpen, onOpenChange }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    dispatch(logoutUser()).then(() => navigate("/"));
     onOpenChange(false);
   };
 

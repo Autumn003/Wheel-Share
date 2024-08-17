@@ -13,9 +13,12 @@ import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
 import { ButtonLoading } from "../ui/loading-button";
 import { forgetPassword } from "@/actions/user.action";
+import { useToast } from "@/components/ui/use-toast";
+import { resetUserError } from "@/slices/user.slice";
 
 const ForgetPass = ({ isOpen, onOpenChange }) => {
   const dispatch = useDispatch();
+  const { toast } = useToast();
   const { loading, error } = useSelector((state) => state.user);
   const [formData, setFormData] = useState({
     email: "",
@@ -31,7 +34,11 @@ const ForgetPass = ({ isOpen, onOpenChange }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(forgetPassword(formData.email));
+    dispatch(forgetPassword(formData.email)).then((action) => {
+      if (action.type === "user/forgetPassword/fulfilled") {
+        onOpenChange(false);
+      }
+    });
   };
 
   return (
@@ -61,7 +68,6 @@ const ForgetPass = ({ isOpen, onOpenChange }) => {
                 />
               </div>
             </div>
-            {error && <p className="text-red-500 text-sm">{error}</p>}
             <DialogFooter>
               {loading ? (
                 <ButtonLoading />

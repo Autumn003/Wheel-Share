@@ -75,8 +75,6 @@ export const fetchUser = createAsyncThunk(
           });
           return retryResponse.data.data;
         } catch (refreshError) {
-          // If refreshing fails, log out the user
-          // dispatch(logoutUser());
           return rejectWithValue("Session expired, please log in again");
         }
       } else {
@@ -90,7 +88,6 @@ export const fetchUser = createAsyncThunk(
 export const forgetPassword = createAsyncThunk(
   "user/forgetPassword",
   async (email, { rejectWithValue }) => {
-    console.log(email);
     try {
       const response = await axios.post("/api/v1/user/forgot-password", {
         email,
