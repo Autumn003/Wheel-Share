@@ -1,5 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser, registerUser } from "../actions/user.action";
+import {
+  fetchUser,
+  forgetPassword,
+  registerUser,
+} from "../actions/user.action";
 import { loginUser } from "../actions/user.action";
 import { logoutUser } from "../actions/user.action";
 
@@ -63,6 +67,18 @@ const userSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(forgetPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(forgetPassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(forgetPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

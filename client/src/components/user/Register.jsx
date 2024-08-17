@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { loginUser, registerUser } from "../../actions/user.action.js";
 import { resetUserError } from "../../slices/user.slice.js";
+import { ButtonLoading } from "../ui/loading-button.jsx";
 
 const Register = ({ isOpen, onOpenChange }) => {
   const dispatch = useDispatch();
@@ -143,9 +144,7 @@ const Register = ({ isOpen, onOpenChange }) => {
           </div>
           {error && <p className="text-red-500 text-sm">{error}</p>}
           <DialogFooter>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Registering..." : "Register"}
-            </Button>
+            {loading ? <ButtonLoading /> : <Button type="submit">LogIn</Button>}
           </DialogFooter>
         </form>
       </DialogContent>

@@ -8,11 +8,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../ui/button";
-import Register from "../user/Register.jsx";
-import Login from "../user/Login.jsx";
-import Logout from "../user/Logout.jsx";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Login, Logout, Register } from "../index";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -62,7 +60,6 @@ const Header = () => {
           </DropdownMenu>
         </div>
       </div>
-
       {/* Dialogs */}
       <Register isOpen={isRegisterOpen} onOpenChange={setIsRegisterOpen} />
       <Login isOpen={isLoginOpen} onOpenChange={setIsLoginOpen} />

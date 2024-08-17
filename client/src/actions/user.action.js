@@ -85,3 +85,20 @@ export const fetchUser = createAsyncThunk(
     }
   }
 );
+
+// forget password
+export const forgetPassword = createAsyncThunk(
+  "user/forgetPassword",
+  async (email, { rejectWithValue }) => {
+    console.log(email);
+    try {
+      const response = await axios.post("/api/v1/user/forgot-password", {
+        email,
+      });
+
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
