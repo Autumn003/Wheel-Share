@@ -100,7 +100,7 @@ const Login = ({ isOpen, onOpenChange }) => {
                 onClick={() => {
                   setIsForgetPasswordOpen(true), onOpenChange(false);
                 }}
-                className="text-blue-500"
+                className="text-blue-500 cursor-pointer"
               >
                 Forget password?
               </div>
