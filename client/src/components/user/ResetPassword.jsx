@@ -11,16 +11,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ButtonLoading } from "../ui/loading-button";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../../actions/user.action.js";
+import { useNavigate, useParams } from "react-router-dom";
+import { resetUserError } from "../../slices/user.slice.js";
 
 const ResetPassword = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
+
+  const { token } = useParams();
 
   const handleChange = (e) => {
     setFormData({
@@ -32,13 +38,20 @@ const ResetPassword = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("reset submit");
     dispatch(
       resetPassword({
-        newPassword: formData.newPassword,
-        confirmPassword: formData.confirmPassword,
+        token,
+        userData: {
+          newPassword: formData.newPassword,
+          confirmPassword: formData.confirmPassword,
+        },
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      })
+      .catch(() => dispatch(resetUserError()));
   };
 
   return (
@@ -51,8 +64,8 @@ const ResetPassword = () => {
               Choose your new password & login agian.
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit}>
+            <CardContent>
               <div className="grid w-full items-center gap-4">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="newPassword">New password</Label>
@@ -76,15 +89,15 @@ const ResetPassword = () => {
                   />
                 </div>
               </div>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            {loading ? (
-              <ButtonLoading />
-            ) : (
-              <Button type="submit">Submit</Button>
-            )}
-          </CardFooter>
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              {loading ? (
+                <ButtonLoading />
+              ) : (
+                <Button type="submit">Submit</Button>
+              )}
+            </CardFooter>
+          </form>
         </Card>
       </div>
     </>
