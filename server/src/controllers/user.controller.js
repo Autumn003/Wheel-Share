@@ -137,7 +137,6 @@ const forgotPassword = asyncHandler(async (req, res) => {
     validateBeforeSave: false,
   });
 
-  // const resetUrl = `${req.protocol}://${req.get("host")}/reset-password/${resetToken}`; //onlty for testing purpose delete while you have frontend url
   const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
 
   const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a reset ypur passwor here: \n\n ${resetUrl} \n\n If you has not make the reset password request, Ignore this email.`;

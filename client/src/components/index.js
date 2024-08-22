@@ -6,6 +6,7 @@ import Register from "./user/Register";
 import Login from "./user/Login";
 import Logout from "./user/Logout";
 import ResetPassword from "./user/ResetPassword";
+import CreateRide from "./ride/CreateRide";
 
 export {
   Profile,
@@ -16,4 +17,5 @@ export {
   Login,
   Logout,
   ResetPassword,
+  CreateRide,
 };
