@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { getRides } from "../../actions/ride.action.js";
 import { DateTimePicker } from "../timePicker/date-time-picker";
+import { DatePicker } from "../ui/date-picker.jsx";
 
 const libraries = ["places"];
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -194,42 +195,41 @@ const SearchRide = () => {
 
         <div className="mb-4">
           <Label>Search Date</Label>
-          <DateTimePicker
-            name="searchDate"
-            value={formData.searchDate ? new Date(formData.searchDate) : null}
+          <DatePicker
             onChange={(date) => {
-              // Ensure `date` is a valid Date object before converting
-              setFormData((prev) => ({
-                ...prev,
-                searchDate: date ? date.toISOString().split("T")[0] : "",
-              }));
+              if (date) {
+                const localDate = new Date(
+                  date.getTime() - date.getTimezoneOffset() * 60000
+                );
+                setFormData((prev) => ({
+                  ...prev,
+                  searchDate: localDate.toISOString().split("T")[0],
+                }));
+              } else {
+                setFormData((prev) => ({
+                  ...prev,
+                  searchDate: "",
+                }));
+              }
             }}
           />
         </div>
 
         <div className="mb-4">
           <Label>Minimum Available Seats</Label>
-          <Select
+          <Input
+            type="number"
             name="miniAvailableSeats"
             value={formData.miniAvailableSeats}
-            onValueChange={(value) =>
+            onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                miniAvailableSeats: parseInt(value, 10),
+                miniAvailableSeats: parseInt(e.target.value, 10),
               }))
             }
-          >
-            <SelectTrigger>
-              <SelectValue>{formData.miniAvailableSeats}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              {[1, 2, 3, 4, 5].map((seats) => (
-                <SelectItem key={seats} value={seats}>
-                  {seats}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            min="1"
+            required
+          />
         </div>
 
         {loading ? (
