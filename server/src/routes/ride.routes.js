@@ -14,7 +14,7 @@ import {
 const router = Router();
 
 router.route("/create-ride").post(verifyJWT, createRide);
-router.route("/search").get(searchRide);
+router.route("/search").post(searchRide);
 router.route("/update-ride/:rideId").put(verifyJWT, updateRide);
 router.route("/delete-ride/:rideId").delete(verifyJWT, deleteRide);
 router.route("/:rideId/join-ride").post(verifyJWT, joinRide);

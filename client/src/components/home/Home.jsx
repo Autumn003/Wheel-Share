@@ -1,7 +1,9 @@
 import React from "react";
+import { SearchRide } from "..";
 const Home = () => {
   return (
     <>
+      <SearchRide />
       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut rerum
       voluptatum id! Dolore blanditiis, mollitia beatae quisquam officiis
       ducimus expedita, veritatis minima eum tempore eaque quae rerum

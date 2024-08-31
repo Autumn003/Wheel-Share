@@ -16,3 +16,19 @@ export const createRide = createAsyncThunk(
     }
   }
 );
+
+export const getRides = createAsyncThunk(
+  "rides/searchRide",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axios.post("/api/v1/ride/search", formData);
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
