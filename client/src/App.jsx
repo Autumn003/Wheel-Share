@@ -3,7 +3,13 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { fetchUser } from "./actions/user.action.js";
 
-import { Header, Home, Profile, ResetPassword } from "./components/index.js";
+import {
+  CreateRide,
+  Header,
+  Home,
+  Profile,
+  ResetPassword,
+} from "./components/index.js";
 
 import { Toaster } from "./components/ui/toaster.jsx";
 import { resetUserError } from "./slices/user.slice.js";
@@ -25,6 +31,7 @@ function App() {
         <Route path="/profile" Component={Profile} />
         <Route path="/" Component={Home} />
         <Route path="/reset-password/:token" Component={ResetPassword} />
+        <Route path="/create-ride" Component={CreateRide} />
       </Routes>
       <Toaster />
     </Router>

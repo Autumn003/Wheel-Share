@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
 import axios from "axios";
@@ -16,6 +16,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createRide } from "../../actions/ride.action";
+import { DialogTitle } from "@radix-ui/react-dialog";
+import { DateTimePicker } from "../timePicker/date-time-picker";
 
 const libraries = ["places"];
 
@@ -38,7 +40,7 @@ const CreateRide = () => {
     sourceLng: null,
     destinationLat: null,
     destinationLng: null,
-    departureTime: "",
+    departureTime: null,
     availableSeats: "",
     vehicleType: "mini",
     price: "",
@@ -114,7 +116,7 @@ const CreateRide = () => {
     }
   };
 
-  const handleSuggestionClick = async (placeId) => {
+  const handleSuggestionClick = async (placeId, type) => {
     try {
       const response = await axios.get(
         `/api/v1/map/place/details?placeId=${placeId}`
@@ -122,7 +124,7 @@ const CreateRide = () => {
       const location = response.data.result.geometry.location;
       const address = response.data.result.formatted_address;
 
-      if (mapType === "source") {
+      if (type === "source") {
         setSelectedSource({ lat: location.lat, lng: location.lng });
         setFormData((prev) => ({
           ...prev,
@@ -130,7 +132,8 @@ const CreateRide = () => {
           sourceLat: location.lat,
           sourceLng: location.lng,
         }));
-      } else if (mapType === "destination") {
+        setSourceSuggestions([]);
+      } else if (type === "destination") {
         setSelectedDestination({ lat: location.lat, lng: location.lng });
         setFormData((prev) => ({
           ...prev,
@@ -138,6 +141,7 @@ const CreateRide = () => {
           destinationLat: location.lat,
           destinationLng: location.lng,
         }));
+        setDestinationSuggestions([]);
       }
       setShowMap(true); // Show the map to confirm the location
     } catch (error) {
@@ -151,13 +155,39 @@ const CreateRide = () => {
     dispatch(createRide(formData));
   };
 
+  const sourceInputRef = useRef();
+  const destinationInputRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        sourceInputRef.current &&
+        !sourceInputRef.current.contains(e.target)
+      ) {
+        setSourceSuggestions([]); // Clear source suggestions if clicked outside
+      }
+      if (
+        destinationInputRef.current &&
+        !destinationInputRef.current.contains(e.target)
+      ) {
+        setDestinationSuggestions([]); // Clear destination suggestions if clicked outside
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (!isLoaded) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
       <h2 className="text-xl font-bold mb-4">Create a New Ride</h2>
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
+        <div className="mb-4" ref={sourceInputRef}>
           <Label>Source Location</Label>
           <Input
             type="text"
@@ -166,8 +196,13 @@ const CreateRide = () => {
             onChange={(e) => {
               handleInputChange(e);
               setMapType("source");
-              setLocationQuery(e.target.value);
-              handleLocationSearch(e.target.value, "source");
+              const query = e.target.value;
+              setLocationQuery(query);
+              if (query.trim()) {
+                handleLocationSearch(query, "source");
+              } else {
+                setSourceSuggestions([]); // Clear suggestions if input is empty
+              }
             }}
           />
           {sourceSuggestions.map((suggestion) => (
@@ -176,14 +211,14 @@ const CreateRide = () => {
               onClick={() =>
                 handleSuggestionClick(suggestion.place_id, "source")
               }
-              className="cursor-pointer  hover:bg-[rgba(0,0,0,0.20)] rounded-md p-2"
+              className="cursor-pointer hover:bg-[rgba(0,0,0,0.20)] rounded-md p-2"
             >
               {suggestion.description}
             </p>
           ))}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4" ref={destinationInputRef}>
           <Label>Destination Location</Label>
           <Input
             type="text"
@@ -192,8 +227,13 @@ const CreateRide = () => {
             onChange={(e) => {
               handleInputChange(e);
               setMapType("destination");
-              setLocationQuery(e.target.value);
-              handleLocationSearch(e.target.value, "destination");
+              const query = e.target.value;
+              setLocationQuery(query);
+              if (query.trim()) {
+                handleLocationSearch(query, "destination");
+              } else {
+                setDestinationSuggestions([]); // Clear suggestions if input is empty
+              }
             }}
           />
           {destinationSuggestions.map((suggestion) => (
@@ -209,14 +249,13 @@ const CreateRide = () => {
           ))}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-1">
           <Label>Departure Time</Label>
-          <Input
-            type="datetime-local"
-            name="departureTime"
+          <DateTimePicker
             value={formData.departureTime}
-            onChange={handleInputChange}
-            required
+            onChange={(date) => {
+              setFormData((prev) => ({ ...prev, departureTime: date }));
+            }}
           />
         </div>
 
@@ -281,11 +320,10 @@ const CreateRide = () => {
         ) : (
           <Button type="submit">Create Ride</Button>
         )}
-
-        {error && <p className="text-red-500 mt-2">{error}</p>}
       </form>
 
       <Dialog open={showMap} onOpenChange={setShowMap}>
+        <DialogTitle />
         <DialogContent>
           <GoogleMap
             mapContainerStyle={{ height: "400px", width: "100%" }}
