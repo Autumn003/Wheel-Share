@@ -47,6 +47,7 @@ const rideSlice = createSlice({
       .addCase(getRides.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.rides = [];
         toast({
           variant: "destructive",
           description: action.payload,
