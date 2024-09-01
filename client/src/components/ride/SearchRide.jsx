@@ -6,23 +6,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { ButtonLoading } from "@/components/ui/loading-button";
-import { Dialog, DialogContent, DialogFooter } from "@/components/ui/dialog";
-import {
-  Select,
-  SelectItem,
-  SelectContent,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { getRides } from "../../actions/ride.action.js";
-import { DateTimePicker } from "../timePicker/date-time-picker";
+import { getRideDetails, getRides } from "../../actions/ride.action.js";
+import { Card, CardContent } from "@/components/ui/card";
 import { DatePicker } from "../ui/date-picker.jsx";
+import { GitCommitHorizontal } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const libraries = ["places"];
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const SearchRide = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { loading, error, rides } = useSelector((state) => state.rides);
 
   // Load Google Maps script asynchronously with libraries
@@ -101,6 +96,11 @@ const SearchRide = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     dispatch(getRides(formData));
+  };
+
+  const handleCardClick = (ride) => {
+    dispatch(getRideDetails(ride));
+    navigate(`ride/${ride}`);
   };
 
   const sourceInputRef = useRef();
@@ -193,7 +193,7 @@ const SearchRide = () => {
           ))}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-1">
           <Label>Search Date</Label>
           <DatePicker
             onChange={(date) => {
@@ -242,35 +242,37 @@ const SearchRide = () => {
       {rides && rides.length > 0 && (
         <div className="mt-4">
           <h3 className="text-lg font-bold">Available Rides</h3>
-          {/* Render available rides */}
-          <ul>
+          <div>
             {rides.map((ride) => (
-              <li key={ride._id} className="mb-2">
-                <div>
-                  <strong>Source:</strong> {ride.source.name}
-                </div>
-                <div>
-                  <strong>Destination:</strong> {ride.destination.name}
-                </div>
-                <div>
-                  <strong>Departure Time:</strong>{" "}
-                  {new Date(ride.departureTime).toLocaleString()}
-                </div>
-                <div>
-                  <strong>Available Seats:</strong> {ride.availableSeats}
-                </div>
-                <div>
-                  <strong>Vehicle Type:</strong> {ride.vehicleType}
-                </div>
-                <div>
-                  <strong>Price:</strong> ${ride.price}
-                </div>
-                <div>
-                  <strong>Additional Info:</strong> {ride.additionalInfo}
-                </div>
-              </li>
+              <Card
+                key={ride._id}
+                onClick={() => handleCardClick(ride._id)}
+                className="pt-3 cursor-pointer"
+              >
+                <CardContent>
+                  <div className="flex mb-2">
+                    <div className="w-1/2">{ride.source.name}</div>
+                    <div className="self-center flex justify-center w-1/4">
+                      <GitCommitHorizontal className="md:size-12 size-8" />
+                    </div>
+                    <div className="w-1/2">{ride.destination.name}</div>
+                  </div>
+                  <div>
+                    {new Date(ride.departureTime).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}{" "}
+                    {new Date(ride.departureTime).toLocaleTimeString("en-US")}
+                  </div>
+
+                  <div>
+                    <strong>₹{ride.price}</strong>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
-          </ul>
+          </div>
         </div>
       )}
     </div>

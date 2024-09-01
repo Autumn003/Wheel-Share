@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createRide } from "../actions/ride.action";
-import { getRides } from "../actions/ride.action";
+import { createRide, getRides } from "../actions/ride.action";
 
 import { toast } from "@/components/ui/use-toast";
 

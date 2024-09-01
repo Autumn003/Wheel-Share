@@ -20,6 +20,6 @@ router.route("/delete-ride/:rideId").delete(verifyJWT, deleteRide);
 router.route("/:rideId/join-ride").post(verifyJWT, joinRide);
 router.route("/:rideId/leave").post(verifyJWT, leaveRide);
 router.route("/:rideId/update-seats").post(verifyJWT, updateSeats);
-router.route("/:rideId").get(verifyJWT, getRideDetails);
+router.route("/:rideId").get(getRideDetails);
 
 export default router;

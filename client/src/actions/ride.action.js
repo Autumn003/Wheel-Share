@@ -32,3 +32,19 @@ export const getRides = createAsyncThunk(
     }
   }
 );
+
+export const getRideDetails = createAsyncThunk(
+  "rideDetails",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/v1/ride/${id}`);
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
