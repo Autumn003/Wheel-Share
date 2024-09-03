@@ -89,8 +89,11 @@ const getRideDetails = asyncHandler(async (req, res) => {
 
   try {
     const ride = await Ride.findById(rideId)
-      .populate("driver", "name email")
-      .populate("riders", "name email");
+      .populate("driver", "name email avatar")
+      .populate({
+        path: "riders.rider",
+        select: "name email avatar", // select the fields you need
+      });
 
     if (!ride) {
       throw new ApiError(404, "Ride not found");
