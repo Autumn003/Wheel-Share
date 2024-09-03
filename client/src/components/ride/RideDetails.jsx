@@ -106,8 +106,8 @@ const RideDetails = () => {
           ))}
         </CardFooter>
       </Card>
-      <div className="sticky bottom-0 w-screen p-6 bg-background flex justify-center">
-        <Button className="bg-sky-500 text-white hover:bg-sky-600 gap-1 text-md">
+      <div className="sticky bottom-0 p-6 bg-background flex justify-center">
+        <Button className="bg-sky-500 text-white hover:bg-sky-600 text-md gap-1">
           Join <CirclePlus />
         </Button>
       </div>

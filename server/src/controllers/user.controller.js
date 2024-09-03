@@ -59,7 +59,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email }).select("+password");
   if (!user) {
-    console.log("user password:", password);
     throw new ApiError(400, "Invalid email or password");
   }
 
