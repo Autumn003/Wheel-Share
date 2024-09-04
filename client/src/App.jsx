@@ -10,6 +10,7 @@ import {
   Profile,
   ResetPassword,
   RideDetails,
+  RideHistory,
 } from "./components/index.js";
 
 import { Toaster } from "./components/ui/toaster.jsx";
@@ -34,6 +35,7 @@ function App() {
         <Route path="/reset-password/:token" Component={ResetPassword} />
         <Route path="/create-ride" Component={CreateRide} />
         <Route path="/ride/:id" Component={RideDetails} />
+        <Route path="/ride-history" Component={RideHistory} />
       </Routes>
       <Toaster />
     </Router>

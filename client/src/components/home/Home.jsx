@@ -1,8 +1,11 @@
 import React from "react";
 import { SearchRide } from "..";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "../ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <div className="md:h-72 h-28">
@@ -14,6 +17,7 @@ const Home = () => {
           />
         </AspectRatio>
       </div>
+      <Button onClick={() => navigate("/ride-history")}>History</Button>
       <SearchRide />
       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut rerum
       voluptatum id! Dolore blanditiis, mollitia beatae quisquam officiis

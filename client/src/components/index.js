@@ -9,6 +9,7 @@ import ResetPassword from "./user/ResetPassword";
 import CreateRide from "./ride/CreateRide";
 import SearchRide from "./ride/SearchRide";
 import RideDetails from "./ride/RideDetails";
+import RideHistory from "./ride/RideHistory";
 
 export {
   Profile,
@@ -22,4 +23,5 @@ export {
   CreateRide,
   SearchRide,
   RideDetails,
+  RideHistory,
 };

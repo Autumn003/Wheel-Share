@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getRideDetails, joinRide } from "../../actions/ride.action.js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.jsx";
 import { Button } from "../ui/button.jsx";
@@ -26,6 +26,7 @@ import {
 
 const RideDetails = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { id } = useParams();
   const [seatsToBook, setseatsToBook] = useState(1);
   const { ride, loading, error } = useSelector((state) => state.ride);
@@ -50,6 +51,7 @@ const RideDetails = () => {
 
   const handleJoinRide = () => {
     dispatch(joinRide({ id, seatsToBook }));
+    navigate("/ride-history");
   };
 
   if (loading) return <div>Loading...</div>;
