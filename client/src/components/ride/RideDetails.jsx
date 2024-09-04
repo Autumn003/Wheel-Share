@@ -1,9 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getRideDetails } from "../../actions/ride.action.js";
+import { getRideDetails, joinRide } from "../../actions/ride.action.js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.jsx";
 import { Button } from "../ui/button.jsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "../ui/dialog.jsx";
+import { Input } from "../ui/input.jsx";
+
 import { CirclePlus, MessageCircleMore } from "lucide-react";
 import {
   Card,
@@ -17,6 +27,7 @@ import {
 const RideDetails = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [seatsToBook, setseatsToBook] = useState(1);
   const { ride, loading, error } = useSelector((state) => state.ride);
 
   useEffect(() => {
@@ -25,8 +36,23 @@ const RideDetails = () => {
     }
   }, [dispatch, id]);
 
+  const increamentSeats = () => {
+    if (seatsToBook < ride?.availableSeats) {
+      setseatsToBook((prevSeats) => prevSeats + 1);
+    }
+  };
+
+  const decreamentSeats = () => {
+    if (seatsToBook > 1) {
+      setseatsToBook((prevSeats) => prevSeats - 1);
+    }
+  };
+
+  const handleJoinRide = () => {
+    dispatch(joinRide({ id, seatsToBook }));
+  };
+
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <>
@@ -42,9 +68,7 @@ const RideDetails = () => {
           <CardDescription className="flex justify-between items-center">
             <div className="flex items-center">
               <Avatar>
-                <AvatarImage
-                  src={ride?.driver?.avatar || "../../../public/Profile.png"}
-                />
+                <AvatarImage src={ride?.driver?.avatar || "/Profile.png"} />
                 <AvatarFallback>Profile</AvatarFallback>
               </Avatar>
               <strong className="mx-2">{ride?.driver?.name}</strong>
@@ -92,9 +116,7 @@ const RideDetails = () => {
             >
               <div className="flex items-center m-2">
                 <Avatar>
-                  <AvatarImage
-                    src={rider.avatar || "../../../public/Profile.png"}
-                  />
+                  <AvatarImage src={rider.avatar || "/Profile.png"} />
                   <AvatarFallback>Rider</AvatarFallback>
                 </Avatar>
                 <p className="mx-2">{rider.rider.name}</p>
@@ -107,9 +129,43 @@ const RideDetails = () => {
         </CardFooter>
       </Card>
       <div className="sticky bottom-0 p-6 bg-background flex justify-center">
-        <Button className="bg-sky-500 text-white hover:bg-sky-600 text-md gap-1">
-          Join <CirclePlus />
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-sky-500 text-white hover:bg-sky-600 text-md gap-1">
+              Join <CirclePlus />
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Join Ride</DialogTitle>
+              <DialogDescription>
+                Choose the number of seats you want to book:
+              </DialogDescription>
+            </DialogHeader>
+            <div className="items-center flex flex-col">
+              <div className="flex items-center my-4">
+                <Button onClick={decreamentSeats} disabled={seatsToBook <= 1}>
+                  -
+                </Button>
+                <Input
+                  type="number"
+                  value={seatsToBook}
+                  readOnly
+                  className="w-20 text-center mx-2"
+                />
+                <Button
+                  onClick={increamentSeats}
+                  disabled={seatsToBook >= ride?.availableSeats}
+                >
+                  +
+                </Button>
+              </div>
+              <Button onClick={handleJoinRide} className="mt-4">
+                Confirm
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

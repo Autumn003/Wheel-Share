@@ -48,3 +48,23 @@ export const getRideDetails = createAsyncThunk(
     }
   }
 );
+
+export const joinRide = createAsyncThunk(
+  "rideDetails/joinRide",
+  async ({ id, seatsToBook }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`/api/v1/ride/${id}/join-ride`, {
+        seatsToBook,
+      });
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);

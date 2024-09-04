@@ -1,8 +1,19 @@
 import React from "react";
 import { SearchRide } from "..";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+
 const Home = () => {
   return (
     <>
+      <div className="md:h-72 h-28">
+        <AspectRatio ratio={4 / 1}>
+          <img
+            src="/banner.png"
+            alt="Banner"
+            className="object-cover w-full md:h-72 h-28"
+          />
+        </AspectRatio>
+      </div>
       <SearchRide />
       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut rerum
       voluptatum id! Dolore blanditiis, mollitia beatae quisquam officiis
