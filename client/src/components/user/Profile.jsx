@@ -1,11 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
