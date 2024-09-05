@@ -4,6 +4,8 @@ import {
   forgetPassword,
   registerUser,
   resetPassword,
+  updateUser,
+  updateUserAvatar,
 } from "../actions/user.action";
 import { loginUser } from "../actions/user.action";
 import { logoutUser } from "../actions/user.action";
@@ -50,6 +52,7 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
+        state.user = null;
       })
       .addCase(logoutUser.fulfilled, (state, action) => {
         state.loading = false;
@@ -107,6 +110,47 @@ const userSlice = createSlice({
         });
       })
       .addCase(resetPassword.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        toast({
+          title: "Name & Email updated",
+          description: "Your details has been updated.",
+          status: "success",
+        });
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(updateUserAvatar.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUserAvatar.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        toast({
+          title: "Profile Update",
+          status: "success",
+        });
+      })
+      .addCase(updateUserAvatar.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         toast({

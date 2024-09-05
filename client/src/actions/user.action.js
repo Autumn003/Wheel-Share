@@ -52,7 +52,7 @@ export const logoutUser = createAsyncThunk(
   }
 );
 
-// Action to fetch user details
+// user details
 export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async (_, { dispatch, rejectWithValue }) => {
@@ -108,6 +108,41 @@ export const resetPassword = createAsyncThunk(
       const response = await axios.put(
         `/api/v1/user/reset-password/${token}`,
         userData
+      );
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// update user details
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async (userData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put("/api/v1/user/update-user", userData);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+// update user details
+export const updateUserAvatar = createAsyncThunk(
+  "user/updateUserAvatar",
+  async (avatarData, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      const response = await axios.put(
+        "/api/v1/user/update-avatar",
+        avatarData,
+        config
       );
       return response.data.data;
     } catch (error) {

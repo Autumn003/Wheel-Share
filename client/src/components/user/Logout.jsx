@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,7 +19,9 @@ const Logout = ({ isOpen, onOpenChange }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/"));
+    dispatch(logoutUser()).then(() => {
+      navigate("/");
+    });
     onOpenChange(false);
   };
 

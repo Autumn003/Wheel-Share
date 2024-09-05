@@ -31,7 +31,10 @@ const Header = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="link" size="icon">
                 <Avatar>
-                  <AvatarImage src={user?.avatar || "/Profile.png"} />
+                  <AvatarImage
+                    src={user?.avatar || "/Profile.png"}
+                    className="object-cover"
+                  />
                   <AvatarFallback>Profile</AvatarFallback>
                 </Avatar>
               </Button>
