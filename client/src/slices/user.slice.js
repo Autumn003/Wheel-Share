@@ -4,6 +4,7 @@ import {
   forgetPassword,
   registerUser,
   resetPassword,
+  updatePassword,
   updateUser,
   updateUserAvatar,
 } from "../actions/user.action";
@@ -151,6 +152,26 @@ const userSlice = createSlice({
         });
       })
       .addCase(updateUserAvatar.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(updatePassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updatePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        // state.user = action.payload;
+        toast({
+          title: "Password Update",
+          status: "success",
+        });
+      })
+      .addCase(updatePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
         toast({

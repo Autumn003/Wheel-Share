@@ -22,7 +22,6 @@ const uploadOnCloudinary = async (localPath) => {
       width: 550,
       crop: "scale",
     });
-    console.log("file successfully uploaded on cloudinary");
     fs.unlinkSync(localPath);
 
     return response;

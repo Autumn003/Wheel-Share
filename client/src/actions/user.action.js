@@ -121,32 +121,61 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/api/v1/user/update-user", userData);
+      const response = await axios.put("/api/v1/user/update-user", userData, {
+        withCredentials: true,
+      });
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
     }
   }
 );
 
-// update user details
+// update user avatar
 export const updateUserAvatar = createAsyncThunk(
   "user/updateUserAvatar",
-  async (avatarData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const config = {
+      const response = await axios.put("/api/v1/user/update-avatar", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      };
-      const response = await axios.put(
-        "/api/v1/user/update-avatar",
-        avatarData,
-        config
-      );
+        withCredentials: true,
+      });
       return response.data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+// update password
+export const updatePassword = createAsyncThunk(
+  "user/updatePassword",
+  async (passwordData, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        "/api/v1/user/update-password",
+        passwordData,
+        {
+          withCredentials: true,
+        }
+      );
+      return response.data.message;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
     }
   }
 );
