@@ -29,8 +29,28 @@ const userSchema = new Schema(
 
     ridesHistory: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "Ride",
+        rideId: {
+          type: Schema.Types.ObjectId,
+          ref: "Ride",
+        },
+        source: {
+          name: { type: String, required: true },
+          coordinates: {
+            type: [Number], // [lng, lat] format
+            required: true,
+          },
+        },
+        destination: {
+          name: { type: String, required: true },
+          coordinates: {
+            type: [Number], // [lng, lat] format
+            required: true,
+          },
+        },
+        departureTime: {
+          type: Date,
+          required: true,
+        },
       },
     ],
 

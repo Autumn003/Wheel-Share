@@ -2,6 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
+import { Ride } from "../models/ride.model.js";
 import crypto from "crypto";
 import sendEmail from "../utils/sendEmail.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
@@ -291,7 +292,7 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, user, "User name updated successfully"));
 });
 
-// add rides to history
+// add ride to history
 const addRideToHistory = asyncHandler(async (req, _, rideId) => {
   try {
     const user = await User.findById(req.user._id);
@@ -303,13 +304,30 @@ const addRideToHistory = asyncHandler(async (req, _, rideId) => {
       throw new ApiError(400, "Ride Id is required");
     }
 
-    if (!user.ridesHistory.includes(rideId)) {
-      user.ridesHistory.push(rideId);
+    // Find the ride to get source and destination details
+    const ride = await Ride.findById(rideId);
+    if (!ride) {
+      throw new ApiError(404, "Ride not found");
+    }
+
+    const rideHistoryEntry = {
+      rideId: ride._id,
+      source: ride.source,
+      destination: ride.destination,
+      departureTime: ride.departureTime,
+    };
+
+    // Check if the ride is already in the history
+    const isAlreadyInHistory = user.ridesHistory.some(
+      (history) => history.rideId.toString() === rideId
+    );
+
+    if (!isAlreadyInHistory) {
+      user.ridesHistory.push(rideHistoryEntry);
       await user.save({ validateBeforeSave: false });
     }
   } catch (error) {
     console.log(error);
-
     throw new ApiError(500, "Failed to add ride to history");
   }
 });

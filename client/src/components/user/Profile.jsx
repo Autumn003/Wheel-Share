@@ -19,12 +19,17 @@ import {
 } from "@/actions/user.action";
 import { ButtonLoading } from "../ui/loading-button";
 import { Pencil } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { getRideDetails } from "@/actions/ride.action";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { name, email, createdAt, avatar } = useSelector(
+  const navigate = useNavigate();
+  const { name, email, createdAt, avatar, ridesHistory } = useSelector(
     (state) => state.user.user
   );
+  console.log(ridesHistory);
+
   const { loading } = useSelector((state) => state.user);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -90,6 +95,13 @@ const Profile = () => {
         confirmPassword: passwordData.confirmPassword,
       })
     ).then(() => setPasswordDialogOpen(false));
+  };
+
+  const handleRideClick = (rideId) => {
+    if (rideId) {
+      dispatch(getRideDetails(rideId));
+    }
+    navigate(`/ride/${rideId}`);
   };
 
   return (
@@ -278,6 +290,42 @@ const Profile = () => {
                 </form>
               </DialogContent>
             </Dialog>
+          </div>
+        </div>
+        <div className="mt-5">
+          <h2 className="text-2xl font-semibold">Published Rides</h2>
+          <div className="mt-3">
+            {ridesHistory.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4">
+                {ridesHistory.map((ride) => (
+                  <div
+                    key={ride._id}
+                    className="p-4 border rounded-lg shadow-md md:flex justify-between"
+                    onClick={() => handleRideClick(ride._id)}
+                  >
+                    <div>
+                      <p className="">
+                        From:{" "}
+                        <span className="text-gray-400">
+                          {ride.source.name}
+                        </span>
+                      </p>
+                      <p className="">
+                        To:{" "}
+                        <span className="text-gray-400">
+                          {ride.destination.name}
+                        </span>
+                      </p>
+                    </div>
+                    <p className="text-gray-500">
+                      {new Date(ride.departureTime).toDateString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No rides published yet.</p>
+            )}
           </div>
         </div>
       </div>
