@@ -271,42 +271,24 @@ const updatePassword = asyncHandler(async (req, res) => {
 
 // update user details
 const updateUserDetails = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name } = req.body;
 
-  const user = await User.findById(req.user._id).select("+password");
+  if (!name) {
+    throw new ApiError(400, "Name is required");
+  }
+
+  // Find and update user's name
+  const user = await User.findById(req.user._id);
   if (!user) {
-    throw new ApiError(404, "user not found");
+    throw new ApiError(404, "User not found");
   }
 
-  const updateData = {};
-  if (name) updateData.name = name;
-  if (email) {
-    if (!password) {
-      throw new ApiError(400, "password is required to update email");
-    }
+  user.name = name;
+  await user.save({ validateBeforeSave: false });
 
-    const isPasswordMatch = await user.comparePassword(password);
-    if (!isPasswordMatch) {
-      throw new ApiError(401, "Incorrect password");
-    }
-
-    updateData.email = email;
-  }
-
-  try {
-    const user = await User.findByIdAndUpdate(req.user._id, updateData, {
-      new: true,
-    });
-    if (!user) {
-      throw new ApiError(404, "User not found");
-    }
-
-    return res
-      .status(200)
-      .json(new ApiResponse(400, user, "User details updated successfully"));
-  } catch (error) {
-    throw new ApiError(500, "Failed to update user details");
-  }
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "User name updated successfully"));
 });
 
 // add rides to history
