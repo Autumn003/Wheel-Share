@@ -54,8 +54,12 @@ const RideDetails = () => {
     navigate("/ride-history");
   };
 
-  if (loading) return <div>Loading...</div>;
-
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <p className="self-center">Something went wrong</p>;
+  }
   return (
     <>
       <Card className="md:mx-10 md:mt-10 rounded-none md:rounded-lg">

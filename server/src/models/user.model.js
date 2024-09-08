@@ -51,6 +51,11 @@ const userSchema = new Schema(
           type: Date,
           required: true,
         },
+        driver: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
       },
     ],
 

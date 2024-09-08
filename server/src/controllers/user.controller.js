@@ -315,6 +315,7 @@ const addRideToHistory = asyncHandler(async (req, _, rideId) => {
       source: ride.source,
       destination: ride.destination,
       departureTime: ride.departureTime,
+      driver: ride.driver,
     };
 
     // Check if the ride is already in the history
