@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getRideDetails, joinRide } from "../actions/ride.action";
+import {
+  getRideDetails,
+  joinRide,
+  leaveRide,
+  updateSeats,
+} from "../actions/ride.action";
 
 import { toast } from "@/components/ui/use-toast";
 
@@ -39,6 +44,40 @@ const rideSlice = createSlice({
         state.ride = action.payload;
       })
       .addCase(joinRide.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(leaveRide.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(leaveRide.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ride = action.payload;
+      })
+      .addCase(leaveRide.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(updateSeats.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateSeats.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ride = action.payload;
+      })
+      .addCase(updateSeats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         toast({

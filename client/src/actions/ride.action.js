@@ -68,3 +68,41 @@ export const joinRide = createAsyncThunk(
     }
   }
 );
+
+export const leaveRide = createAsyncThunk(
+  "rideDetails/leaveRide",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`/api/v1/ride/${id}/leave`);
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+export const updateSeats = createAsyncThunk(
+  "rideDetails/updateSeats",
+  async ({ id, newSeatsToBook }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(`/api/v1/ride/${id}/update-seats`, {
+        newSeatsToBook,
+      });
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);

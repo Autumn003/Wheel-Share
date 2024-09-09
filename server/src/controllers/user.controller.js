@@ -335,6 +335,8 @@ const addRideToHistory = asyncHandler(async (req, _, rideId) => {
 
 // delete ride from history
 const deleteRideFromHistory = asyncHandler(async (req, _, rideId) => {
+  console.log(`deleteRideFromHistory called with id: ${rideId}`);
+
   try {
     const user = await User.findById(req.user._id);
     if (!user) {
@@ -345,9 +347,14 @@ const deleteRideFromHistory = asyncHandler(async (req, _, rideId) => {
       throw new ApiError(400, "Ride Id is required");
     }
 
-    if (user.ridesHistory.includes(rideId)) {
-      user.ridesHistory.pull(rideId);
+    if (
+      user.ridesHistory.some((history) => history.rideId.toString() === rideId)
+    ) {
+      user.ridesHistory = user.ridesHistory.filter(
+        (history) => history.rideId.toString() !== rideId
+      );
       await user.save({ validateBeforeSave: false });
+    } else {
     }
   } catch (error) {
     throw new ApiError(500, "Failed to remove ride from history");
