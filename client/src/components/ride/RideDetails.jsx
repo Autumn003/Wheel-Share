@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteRide,
-  fetcRidesHistory,
   getRideDetails,
   joinRide,
   leaveRide,
   updateRide,
   updateSeats,
-} from "../../actions/ride.action.js"; // Import additional actions
+} from "../../actions/ride.action.js";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar.jsx";
 import { Button } from "../ui/button.jsx";
 import {
@@ -56,7 +55,7 @@ const RideDetails = () => {
     additionalInfo: "",
   });
   const { ride, loading, error } = useSelector((state) => state.ride);
-  const { user: loggedInUser } = useSelector((state) => state.user); // Get the logged-in user from the store
+  const { user: loggedInUser } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (id) {
@@ -67,7 +66,6 @@ const RideDetails = () => {
   useEffect(() => {
     if (ride) {
       setFormData({
-        // departureTime: ride.departureTime,
         availableSeats: ride.availableSeats,
         vehicleType: ride.vehicleType,
         price: ride.price,
@@ -212,12 +210,10 @@ const RideDetails = () => {
 
       <div className="sticky bottom-0 p-6 bg-background flex justify-center">
         {isDriver ? (
-          <div className="flex space-x-2">
+          <div className="flex justify-around lg:justify-center w-full lg:space-x-5 ">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-yellow-500 text-white">
-                  Update Ride
-                </Button>
+                <Button className="bg-sky-500 text-white">Update Ride</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -318,9 +314,7 @@ const RideDetails = () => {
           <div className="flex space-x-2">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-yellow-500 text-white">
-                  Update Seats
-                </Button>
+                <Button className="bg-sky-500 text-white">Update Seats</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

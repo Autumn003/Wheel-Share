@@ -64,22 +64,6 @@ export const getRideDetails = createAsyncThunk(
   }
 );
 
-export const fetcRidesHistory = createAsyncThunk(
-  "ridesHistory",
-  async (_, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`/api/v1/user/rides-history`);
-      return response.data.data;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        return rejectWithValue(error.response.data.message);
-      } else {
-        return rejectWithValue("An unexpected error occurred");
-      }
-    }
-  }
-);
-
 export const joinRide = createAsyncThunk(
   "rideDetails/joinRide",
   async ({ id, seatsToBook }, { rejectWithValue }) => {
