@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/popover";
 import { TimePickerDemo } from "./time-picker-demo";
 
-export function DateTimePicker({ value, onChange }) {
+export function DateTimePicker({
+  value,
+  onChange,
+  placeholder = "Pick a date",
+}) {
   const [date, setDate] = useState(value || null);
 
   useEffect(() => {
@@ -52,7 +56,7 @@ export function DateTimePicker({ value, onChange }) {
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP HH:mm:ss") : <span>Pick a date</span>}
+          {date ? format(date, "PPP HH:mm:ss") : <span>{placeholder}</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

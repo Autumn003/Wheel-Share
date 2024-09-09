@@ -87,6 +87,27 @@ export const leaveRide = createAsyncThunk(
   }
 );
 
+export const updateRide = createAsyncThunk(
+  "rideDetails/updateRide",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `/api/v1/ride/update-ride/${id}`,
+        formData
+      );
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
 export const updateSeats = createAsyncThunk(
   "rideDetails/updateSeats",
   async ({ id, newSeatsToBook }, { rejectWithValue }) => {

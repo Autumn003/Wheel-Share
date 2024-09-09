@@ -3,6 +3,7 @@ import {
   getRideDetails,
   joinRide,
   leaveRide,
+  updateRide,
   updateSeats,
 } from "../actions/ride.action";
 
@@ -78,6 +79,24 @@ const rideSlice = createSlice({
         state.ride = action.payload;
       })
       .addCase(updateSeats.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(updateRide.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateRide.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ride = action.payload;
+        toast({ description: "Ride updated successfully", status: "success" });
+      })
+      .addCase(updateRide.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         toast({
