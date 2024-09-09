@@ -18,12 +18,14 @@ import {
 import { createRide } from "../../actions/ride.action";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../timePicker/date-time-picker";
+import { useNavigate } from "react-router-dom";
 
 const libraries = ["places"];
 
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const CreateRide = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.rides);
 
@@ -149,10 +151,14 @@ const CreateRide = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    dispatch(createRide(formData));
+    const createdRide = await dispatch(createRide(formData)).unwrap();
+    if (createdRide?._id) {
+      navigate(`/ride/${createdRide._id}`);
+    } else {
+      console.error("Ride creation failed: No ID found.");
+    }
   };
 
   const sourceInputRef = useRef();
@@ -211,7 +217,7 @@ const CreateRide = () => {
               onClick={() =>
                 handleSuggestionClick(suggestion.place_id, "source")
               }
-              className="cursor-pointer hover:bg-[rgba(0,0,0,0.20)] rounded-md p-2"
+              className="cursor-pointer hover:bg-[rgba(0,0,0,0.20)] rounded-md p-2 mt-2"
             >
               {suggestion.description}
             </p>
@@ -242,7 +248,7 @@ const CreateRide = () => {
               onClick={() =>
                 handleSuggestionClick(suggestion.place_id, "destination")
               }
-              className="cursor-pointer hover:bg-gray-100 p-2"
+              className="cursor-pointer hover:bg-[rgba(0,0,0,0.20)] rounded-md p-2 mt-2"
             >
               {suggestion.description}
             </p>

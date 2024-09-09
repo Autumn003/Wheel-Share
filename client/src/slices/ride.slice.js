@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createRide, getRides } from "../actions/ride.action";
+import { createRide, deleteRide, getRides } from "../actions/ride.action";
 
 import { toast } from "@/components/ui/use-toast";
 
@@ -22,11 +22,30 @@ const rideSlice = createSlice({
         state.rides = [...state.rides, action.payload];
         toast({
           title: "Ride created",
-          description: "Your ride is successfully created.",
           status: "success",
         });
       })
       .addCase(createRide.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+        toast({
+          variant: "destructive",
+          description: action.payload,
+          status: "error",
+        });
+      })
+      .addCase(deleteRide.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteRide.fulfilled, (state, action) => {
+        state.loading = false;
+        toast({
+          title: "Ride Deleted",
+          status: "success",
+        });
+      })
+      .addCase(deleteRide.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
         toast({

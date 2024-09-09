@@ -43,6 +43,10 @@ const rideSlice = createSlice({
       .addCase(joinRide.fulfilled, (state, action) => {
         state.loading = false;
         state.ride = action.payload;
+        toast({
+          title: "Ride Joinded successfully",
+          status: "success",
+        });
       })
       .addCase(joinRide.rejected, (state, action) => {
         state.loading = false;
@@ -60,6 +64,10 @@ const rideSlice = createSlice({
       .addCase(leaveRide.fulfilled, (state, action) => {
         state.loading = false;
         state.ride = action.payload;
+        toast({
+          title: "Ride Leaved",
+          status: "success",
+        });
       })
       .addCase(leaveRide.rejected, (state, action) => {
         state.loading = false;
@@ -77,6 +85,10 @@ const rideSlice = createSlice({
       .addCase(updateSeats.fulfilled, (state, action) => {
         state.loading = false;
         state.ride = action.payload;
+        toast({
+          title: "Seats updated successfully",
+          status: "success",
+        });
       })
       .addCase(updateSeats.rejected, (state, action) => {
         state.loading = false;

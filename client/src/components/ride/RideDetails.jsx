@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  deleteRide,
+  fetcRidesHistory,
   getRideDetails,
   joinRide,
   leaveRide,
@@ -80,7 +82,9 @@ const RideDetails = () => {
 
   const UpdateRideFormSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateRide({ id, formData }));
+    dispatch(updateRide({ id, formData })).then(() => {
+      return dispatch(getRideDetails(id));
+    });
   };
 
   const increamentSeats = () => {
@@ -96,22 +100,27 @@ const RideDetails = () => {
   };
 
   const handleJoinRide = () => {
-    dispatch(joinRide({ id, seatsToBook }));
-    navigate("/ride-history");
+    dispatch(joinRide({ id, seatsToBook })).then(() => {
+      return dispatch(getRideDetails(id));
+    });
   };
 
   const handleLeaveRide = () => {
     dispatch(leaveRide(id)).then(() => {
-      // dispatch(fetchUser());
-      navigate("/ride-history");
+      return dispatch(fetchUser());
     });
+    navigate("/ride-history");
   };
 
   const handleUpdateSeats = () => {
     dispatch(updateSeats({ id, newSeatsToBook: seatsToBook })).then(() =>
       dispatch(getRideDetails(id))
     );
-    navigate(`/ride/${id}`);
+  };
+
+  const handleDeleteRide = () => {
+    dispatch(deleteRide(id));
+    navigate("/");
   };
 
   const isDriver = loggedInUser?._id === ride?.driver?._id;
@@ -202,7 +211,6 @@ const RideDetails = () => {
       </Card>
 
       <div className="sticky bottom-0 p-6 bg-background flex justify-center">
-        {/* Conditional Dialogs Based on User Type */}
         {isDriver ? (
           <div className="flex space-x-2">
             <Dialog>
@@ -299,7 +307,12 @@ const RideDetails = () => {
                 </form>
               </DialogContent>
             </Dialog>
-            <Button className="bg-red-500 text-white">Delete Ride</Button>
+            <Button
+              onClick={handleDeleteRide}
+              className="bg-red-500 text-white"
+            >
+              Delete Ride
+            </Button>
           </div>
         ) : hasJoined ? (
           <div className="flex space-x-2">

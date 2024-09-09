@@ -16,6 +16,21 @@ export const createRide = createAsyncThunk(
     }
   }
 );
+export const deleteRide = createAsyncThunk(
+  "rides/deleteRide",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`/api/v1/ride/delete-ride/${id}`);
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
 
 export const getRides = createAsyncThunk(
   "rides/searchRide",
@@ -38,6 +53,22 @@ export const getRideDetails = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`/api/v1/ride/${id}`);
+      return response.data.data;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue("An unexpected error occurred");
+      }
+    }
+  }
+);
+
+export const fetcRidesHistory = createAsyncThunk(
+  "ridesHistory",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/v1/user/rides-history`);
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {

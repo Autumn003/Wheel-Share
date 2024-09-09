@@ -364,7 +364,7 @@ const deleteRideFromHistory = asyncHandler(async (req, _, rideId) => {
 // get user's ride history
 const getUserRideHistory = asyncHandler(async (req, res) => {
   try {
-    const user = User.findById(req.user._id).populate("ridesHistory");
+    const user = await User.findById(req.user._id).populate("ridesHistory");
 
     if (!user) {
       throw new ApiError(404, "user not found");

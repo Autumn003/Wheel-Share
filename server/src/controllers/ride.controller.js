@@ -276,6 +276,7 @@ const deleteRide = asyncHandler(async (req, res) => {
   }
 
   await ride.deleteOne();
+  deleteRideFromHistory(req, res, rideId);
   res.status(200).json(new ApiResponse(200, null, "Ride deleted successfully"));
 });
 
