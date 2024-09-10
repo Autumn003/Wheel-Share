@@ -7,6 +7,7 @@ import {
   CreateRide,
   Header,
   Home,
+  Messaging,
   Profile,
   ResetPassword,
   RideDetails,
@@ -36,6 +37,7 @@ function App() {
         <Route path="/create-ride" Component={CreateRide} />
         <Route path="/ride/:id" Component={RideDetails} />
         <Route path="/ride-history" Component={RideHistory} />
+        <Route path="/messages/:userId" Component={Messaging} />
       </Routes>
       <Toaster />
     </Router>

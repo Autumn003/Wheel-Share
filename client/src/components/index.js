@@ -10,6 +10,7 @@ import CreateRide from "./ride/CreateRide";
 import SearchRide from "./ride/SearchRide";
 import RideDetails from "./ride/RideDetails";
 import RideHistory from "./ride/RideHistory";
+import Messaging from "./message/Messaging";
 
 export {
   Profile,
@@ -24,4 +25,5 @@ export {
   SearchRide,
   RideDetails,
   RideHistory,
+  Messaging,
 };

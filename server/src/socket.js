@@ -19,12 +19,31 @@ const configureSocket = (server) => {
     });
 
     //handle sending message
+    // socket.on("sendMessage", async (data) => {
+    //   try {
+    //     const { sender, receiver, content, ride } = data;
+    //     const message = await createMessage({
+    //       sender,
+    //       receiver,
+    //       content,
+    //       ride,
+    //     });
+
+    //     io.receiver.emit("receiveMessage", message);
+    //   } catch (error) {
+    //     console.log("Error sending message: ", error);
+    //   }
+    // });
     socket.on("sendMessage", async (data) => {
       try {
         const { sender, receiver, content, ride } = data;
-        const message = createMessage({ sender, receiver, content, ride });
-
-        io.receiver.emit("receiveMessage", message);
+        const message = await createMessage({
+          sender,
+          receiver,
+          content,
+          ride,
+        });
+        io.to(receiver).emit("receiveMessage", message); // Ensure you're emitting to the correct room
       } catch (error) {
         console.log("Error sending message: ", error);
       }

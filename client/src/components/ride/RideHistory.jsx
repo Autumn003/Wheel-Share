@@ -17,9 +17,6 @@ const RideHistory = () => {
       console.log("Ride id not found");
     }
   };
-  // useEffect(() => {
-  //   dispatch(fetchUser());
-  // }, [dispatch]);
 
   return (
     <>

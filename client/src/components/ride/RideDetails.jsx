@@ -173,7 +173,11 @@ const RideDetails = () => {
                 <AvatarFallback>Profile</AvatarFallback>
               </Avatar>
               <strong className="mx-2">{ride?.driver?.name}</strong>
-              <Button variant="outline" className="mx-2">
+              <Button
+                onClick={() => navigate(`/messages/${ride?.driver?._id}`)}
+                variant="outline"
+                className="mx-2"
+              >
                 <MessageCircleMore />
               </Button>
             </div>

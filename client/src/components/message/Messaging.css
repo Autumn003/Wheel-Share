@@ -1,0 +1,39 @@
+.messaging-container {
+  display: flex;
+  flex-direction: column;
+  height: 85vh;
+}
+
+.messages-list {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message-item {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+}
+
+.message-item.sent {
+  background-color: #daf8cb;
+  align-self: flex-end;
+}
+
+.message-item.received {
+  background-color: #f1f0f0;
+  align-self: flex-start;
+}
+
+.message-input-container {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ccc;
+}
+
+.message-input-container input {
+  flex: 1;
+  padding: 10px;
+}
