@@ -213,7 +213,9 @@ const RideDetails = () => {
           <div className="flex justify-around lg:justify-center w-full lg:space-x-5 ">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-sky-500 text-white">Update Ride</Button>
+                <Button className="bg-sky-500 hover:bg-sky-600 text-white">
+                  Update Ride
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -305,7 +307,7 @@ const RideDetails = () => {
             </Dialog>
             <Button
               onClick={handleDeleteRide}
-              className="bg-red-500 text-white"
+              className="bg-red-500 hover:bg-red-600 text-white"
             >
               Delete Ride
             </Button>
@@ -314,7 +316,9 @@ const RideDetails = () => {
           <div className="flex space-x-2">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-sky-500 text-white">Update Seats</Button>
+                <Button className="bg-sky-500 hover:bg-sky-600 text-white">
+                  Update Seats
+                </Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -346,7 +350,10 @@ const RideDetails = () => {
                 </DialogHeader>
               </DialogContent>
             </Dialog>
-            <Button onClick={handleLeaveRide} className="bg-red-500 text-white">
+            <Button
+              onClick={handleLeaveRide}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
               Leave Ride
             </Button>
           </div>
