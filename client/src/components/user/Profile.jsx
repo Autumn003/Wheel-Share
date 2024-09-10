@@ -300,7 +300,7 @@ const Profile = () => {
         </div>
         <div className="mt-5">
           <h2 className="text-2xl font-semibold">Published Rides</h2>
-          <div className="mt-3">
+          <div className="mt-3 cursor-pointer">
             {ridesHistory.length > 0 ? (
               <div className="grid grid-cols-1 gap-4">
                 {ridesHistory

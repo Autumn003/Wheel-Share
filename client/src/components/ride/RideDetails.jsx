@@ -41,6 +41,17 @@ import {
   SelectValue,
 } from "../ui/select.jsx";
 import { Textarea } from "../ui/textarea.jsx";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogTrigger,
+  AlertDialogAction,
+  AlertDialogCancel,
+} from "../ui/alert-dialog.jsx";
 
 const RideDetails = () => {
   const dispatch = useDispatch();
@@ -54,6 +65,9 @@ const RideDetails = () => {
     price: "",
     additionalInfo: "",
   });
+  const [isLeaveDialogOpen, setIsLeaveDialogOpen] = useState(false);
+  const [deleteRideDialogOpen, setDeleteRideDialogOpen] = useState(false);
+
   const { ride, loading, error } = useSelector((state) => state.ride);
   const { user: loggedInUser } = useSelector((state) => state.user);
 
@@ -110,6 +124,10 @@ const RideDetails = () => {
     navigate("/ride-history");
   };
 
+  const closeLeaveDialog = () => {
+    setIsLeaveDialogOpen(false);
+  };
+
   const handleUpdateSeats = () => {
     dispatch(updateSeats({ id, newSeatsToBook: seatsToBook })).then(() =>
       dispatch(getRideDetails(id))
@@ -119,6 +137,10 @@ const RideDetails = () => {
   const handleDeleteRide = () => {
     dispatch(deleteRide(id));
     navigate("/");
+  };
+
+  const closeDeleteRideDialog = () => {
+    setDeleteRideDialogOpen(false);
   };
 
   const isDriver = loggedInUser?._id === ride?.driver?._id;
@@ -160,31 +182,38 @@ const RideDetails = () => {
         </CardHeader>
         <CardContent>
           <div className="mb-4">
-            <strong className="italic">From:</strong> {ride?.source?.name}
+            <strong className="text-xl text-gray-500">From:</strong>{" "}
+            <i>{ride?.source?.name}</i>
           </div>
           <div className="mb-4">
-            <strong className="italic">To:</strong> {ride?.destination?.name}
+            <strong className="text-xl text-gray-500">To:</strong>{" "}
+            <i>{ride?.destination?.name}</i>
           </div>
           <div className="mb-4 flex justify-between py-5 border-secondary border-y-4 rounded-md">
             <p className="text-md">Total price for 1 passenger</p>
             <p className="text-xl">₹{ride?.price}</p>
           </div>
           <div className="mb-4">
-            <i>Seats available :</i> {ride?.availableSeats}
+            <span className="text-lg text-gray-500">Seats available:</span>{" "}
+            <i className="text-lg">{ride?.availableSeats}</i>
           </div>
           <div className="mb-4">
-            <i>Vehicle Type:</i> {ride?.vehicleType}
+            <span className="text-lg text-gray-500">Vehicle Type:</span>{" "}
+            <i className="text-lg">{ride?.vehicleType?.toUpperCase()}</i>
           </div>
           <div className="mb-4">
-            <i>Additional Info:</i> {ride?.additionalInfo}
+            <span className="text-lg text-gray-500">Additional Info:</span>{" "}
+            <i className="text-lg">{ride?.additionalInfo}</i>
           </div>
           <div className="mb-4">
-            <i>Published on: </i>
-            {new Date(ride.createdAt).toLocaleDateString("en-GB", {
-              day: "numeric",
-              month: "long",
-              year: "numeric",
-            })}
+            <span className="text-lg text-gray-500">Published on: </span>
+            <i>
+              {new Date(ride.createdAt).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </i>
           </div>
         </CardContent>
         <CardFooter className="flex flex-wrap justify-start">
@@ -305,15 +334,38 @@ const RideDetails = () => {
                 </form>
               </DialogContent>
             </Dialog>
-            <Button
-              onClick={handleDeleteRide}
-              className="bg-red-500 hover:bg-red-600 text-white"
+            <AlertDialog
+              open={deleteRideDialogOpen}
+              onOpenChange={setDeleteRideDialogOpen}
             >
-              Delete Ride
-            </Button>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                  onClick={() => setDeleteRideDialogOpen(true)}
+                >
+                  Delete Ride
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Delete Ride</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to delete the ride?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={closeDeleteRideDialog}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDeleteRide}>
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         ) : hasJoined ? (
-          <div className="flex space-x-2">
+          <div className="flex justify-around lg:justify-center w-full lg:space-x-5">
             <Dialog>
               <DialogTrigger asChild>
                 <Button className="bg-sky-500 hover:bg-sky-600 text-white">
@@ -350,12 +402,35 @@ const RideDetails = () => {
                 </DialogHeader>
               </DialogContent>
             </Dialog>
-            <Button
-              onClick={handleLeaveRide}
-              className="bg-red-500 hover:bg-red-600 text-white"
+            <AlertDialog
+              open={isLeaveDialogOpen}
+              onOpenChange={setIsLeaveDialogOpen}
             >
-              Leave Ride
-            </Button>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="bg-red-500 hover:bg-red-600 text-white"
+                  onClick={() => setIsLeaveDialogOpen(true)}
+                >
+                  Leave Ride
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Confirm Leave Ride</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Are you sure you want to leave the ride?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={closeLeaveDialog}>
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleLeaveRide}>
+                    Leave
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         ) : (
           <Dialog>
