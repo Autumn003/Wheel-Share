@@ -10,46 +10,40 @@ const configureSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user conncted");
+    console.log("A user connected");
 
-    // Join a user to  a room (could be user Id or chat room Id)
-    socket.on("joinRoom", (room) => {
+    // Join a room for a specific conversation
+    socket.on("joinRoom", ({ sender, receiver }) => {
+      // Create a unique room ID based on sender and receiver IDs
+      const room = [sender, receiver].sort().join("_");
       socket.join(room);
-      console.log(`User joined room ${room}`);
+      console.log(`User with ID ${sender} joined room ${room}`);
     });
 
-    //handle sending message
-    // socket.on("sendMessage", async (data) => {
-    //   try {
-    //     const { sender, receiver, content, ride } = data;
-    //     const message = await createMessage({
-    //       sender,
-    //       receiver,
-    //       content,
-    //       ride,
-    //     });
-
-    //     io.receiver.emit("receiveMessage", message);
-    //   } catch (error) {
-    //     console.log("Error sending message: ", error);
-    //   }
-    // });
+    // Handle sending a message
     socket.on("sendMessage", async (data) => {
       try {
         const { sender, receiver, content, ride } = data;
+
+        // Create the message in the database
         const message = await createMessage({
           sender,
           receiver,
           content,
           ride,
         });
-        io.to(receiver).emit("receiveMessage", message); // Ensure you're emitting to the correct room
+
+        // Create a unique room ID based on sender and receiver IDs
+        const room = [sender, receiver].sort().join("_");
+
+        // Emit the message to both sender and receiver's room
+        io.to(room).emit("receiveMessage", message);
       } catch (error) {
         console.log("Error sending message: ", error);
       }
     });
 
-    // handle disconnection
+    // Handle disconnection
     socket.on("disconnect", () => {
       console.log("User disconnected");
     });
