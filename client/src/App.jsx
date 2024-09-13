@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { fetchUser } from "./actions/user.action.js";
 
 import {
+  Conversations,
   CreateRide,
   Header,
   Home,
@@ -38,6 +39,7 @@ function App() {
         <Route path="/ride/:id" Component={RideDetails} />
         <Route path="/ride-history" Component={RideHistory} />
         <Route path="/messages/:userId" Component={Messaging} />
+        <Route path="/inbox" Component={Conversations} />
       </Routes>
       <Toaster />
     </Router>

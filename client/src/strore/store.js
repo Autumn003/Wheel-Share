@@ -5,6 +5,7 @@ import userReducer from "../slices/user.slice.js";
 import ridesReducer from "../slices/ride.slice.js";
 import rideDetailsReducer from "../slices/rideDetails.slice.js";
 import messageReducer from "../slices/message.slice.js";
+import conversationReducer from "../slices/conversation.slice.js";
 
 const persistConfig = {
   key: "root",
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   rides: ridesReducer,
   ride: rideDetailsReducer,
   messages: messageReducer,
+  conversation: conversationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

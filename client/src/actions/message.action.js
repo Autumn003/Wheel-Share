@@ -31,3 +31,17 @@ export const addMessage = (message) => ({
   type: "messages/addMessage",
   payload: message,
 });
+
+export const fetchConversations = createAsyncThunk(
+  "conversations/fetchConversations",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/api/v1/message");
+      return response.data.data;
+    } catch (error) {
+      console.log(error);
+
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

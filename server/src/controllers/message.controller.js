@@ -72,4 +72,79 @@ const getMessages = asyncHandler(async (req, res) => {
   }
 });
 
-export { sendMessage, getMessages };
+// Get list of conversations
+const getConversations = asyncHandler(async (req, res) => {
+  try {
+    const userId = req.user._id; // Ensure user ID is correct
+
+    const conversations = await Message.aggregate([
+      {
+        $match: {
+          $or: [{ sender: userId }, { receiver: userId }],
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            sender: {
+              $cond: [
+                { $gte: ["$sender", "$receiver"] },
+                "$sender",
+                "$receiver",
+              ],
+            },
+            receiver: {
+              $cond: [
+                { $gte: ["$sender", "$receiver"] },
+                "$receiver",
+                "$sender",
+              ],
+            },
+          },
+          lastMessage: { $first: "$$ROOT" },
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id.sender",
+          foreignField: "_id",
+          as: "sender",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "_id.receiver",
+          foreignField: "_id",
+          as: "receiver",
+        },
+      },
+      {
+        $project: {
+          sender: { $arrayElemAt: ["$sender.name", 0] },
+          receiver: { $arrayElemAt: ["$receiver.name", 0] },
+          lastMessage: 1,
+        },
+      },
+    ]);
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          conversations,
+          "Conversations retrieved successfully"
+        )
+      );
+  } catch (error) {
+    console.error("Error retrieving conversations:", error); // Log error details
+    throw new ApiError(500, "Failed to retrieve conversations");
+  }
+});
+
+export { sendMessage, getMessages, getConversations };
