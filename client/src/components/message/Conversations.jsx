@@ -8,6 +8,7 @@ const Conversations = () => {
   const { conversations, loading, error } = useSelector(
     (state) => state.conversation
   );
+  const { user } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(fetchConversations());
   }, [dispatch]);
@@ -17,20 +18,27 @@ const Conversations = () => {
 
   return (
     <div className="p-4">
-      {conversations.map((conversation) => (
-        <Link
-          to={`/messages/${conversation._id.receiver}`}
-          key={conversation?.lastMessage?._id}
-        >
-          <div
+      {conversations.map((conversation) => {
+        const isUserReceiver = conversation._id.receiver === user._id;
+        const chatPartnerId = isUserReceiver
+          ? conversation._id.sender
+          : conversation._id.receiver;
+
+        return (
+          <Link
+            to={`/messages/${chatPartnerId}`}
             key={conversation?.lastMessage?._id}
-            className="mb-4 p-4 border rounded-lg shadow-md"
           >
-            <h2 className="text-lg font-bold">{conversation?.receiver}</h2>
-            <p>{conversation?.lastMessage?.content}</p>
-          </div>
-        </Link>
-      ))}
+            <div
+              key={conversation?.lastMessage?._id}
+              className="mb-4 p-4 border rounded-lg shadow-md"
+            >
+              <h2 className="text-lg font-bold">{conversation?.receiver}</h2>
+              <p>{conversation?.lastMessage?.content}</p>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 };
