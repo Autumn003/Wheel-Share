@@ -21,6 +21,12 @@ const Messaging = () => {
   const { userId } = useParams(); // ID of the user you are messaging
   const messageEndRef = useRef(null); // Reference to scroll to the bottom
 
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
   useEffect(() => {
     // Fetch initial messages when component mounts
     dispatch(fetchMessages(userId));
@@ -70,7 +76,7 @@ const Messaging = () => {
   return (
     <div className="flex flex-col rounded-lg shadow-lg ">
       {/* Messages container */}
-      <div className="flex flex-col space-y-4 overflow-auto mb-4 bg-secondary scrollbar-hide p-4 rounded-lg shadow-inner min-h-96 h-full">
+      <div className="flex flex-col space-y-4 overflow-auto mb-4 chat-background scrollbar-hide p-4 rounded-lg shadow-inner min-h-96 h-full">
         {messages?.map((message, index) => {
           // Handle both cases: sender as a string or an object
           const senderId =
@@ -103,7 +109,10 @@ const Messaging = () => {
       </div>
 
       {/* Input container */}
-      <div className="flex items-center space-x-2 sticky bottom-0 p-6 bg-background shadow-[0_-4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[6.8px]">
+      <div
+        onKeyDown={handleKeyPress}
+        className="flex items-center space-x-2 sticky bottom-0 p-6 bg-background shadow-[0_-4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[6.8px]"
+      >
         <input
           type="text"
           value={newMessage}

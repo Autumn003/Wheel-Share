@@ -29,6 +29,9 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+
+    /* Light mode gradient colors */
+    --chat-gradient-light: linear-gradient(to right, #5f97f161, #f0ececc7); /* blue to white */
   }
 
   .dark {
@@ -56,6 +59,9 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Dark mode gradient colors */
+    --chat-gradient-dark: linear-gradient(to left, #1e3b8a7f, #0000008f); /* dark blue to black */
   }
 }
 
@@ -66,18 +72,26 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Chat background styling with gradient */
+  .chat-background {
+    background: var(--chat-gradient-light);
+  }
+
+  .dark .chat-background {
+    background: var(--chat-gradient-dark);
+  }
 }
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
-
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
