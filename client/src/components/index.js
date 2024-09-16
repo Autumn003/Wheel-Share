@@ -12,6 +12,7 @@ import RideDetails from "./ride/RideDetails";
 import RideHistory from "./ride/RideHistory";
 import Messaging from "./message/Messaging";
 import Conversations from "./message/Conversations";
+import Footer from "./layout/Footer";
 
 export {
   Profile,
@@ -28,4 +29,5 @@ export {
   RideHistory,
   Messaging,
   Conversations,
+  Footer,
 };

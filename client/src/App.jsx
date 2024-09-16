@@ -6,6 +6,7 @@ import { fetchUser } from "./actions/user.action.js";
 import {
   Conversations,
   CreateRide,
+  Footer,
   Header,
   Home,
   Messaging,
@@ -41,6 +42,7 @@ function App() {
         <Route path="/messages/:userId" Component={Messaging} />
         <Route path="/inbox" Component={Conversations} />
       </Routes>
+      <Footer />
       <Toaster />
     </Router>
   );

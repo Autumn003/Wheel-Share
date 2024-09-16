@@ -1,79 +1,216 @@
-import React from "react";
+import React, { useState } from "react";
 import { SearchRide } from "..";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { HandCoins, Hourglass, Sprout } from "lucide-react";
+
+const TruncatedDescription = ({ description }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const renderDescription = () => {
+    const words = description.split(" ");
+    if (isExpanded) {
+      return description;
+    } else {
+      return words.length > 20
+        ? `${words.slice(0, 20).join(" ")}...`
+        : description;
+    }
+  };
+
+  return (
+    <div>
+      <p className="text-gray-500">{renderDescription()}</p>
+      {description.split(" ").length > 20 && (
+        <button className="text-blue-500 " onClick={toggleDescription}>
+          {isExpanded ? "Read less" : "Read more"}
+        </button>
+      )}
+    </div>
+  );
+};
 
 const Home = () => {
   const navigate = useNavigate();
   return (
     <>
-      <div className="md:h-72 h-28">
+      <div className="md:h-60 h-28">
         <AspectRatio ratio={4 / 1}>
           <img
-            src="/banner.png"
+            src="/banner2.png"
             alt="Banner"
-            className="object-cover w-full md:h-72 h-28"
+            className="object-cover w-full md:h-60 h-28"
           />
         </AspectRatio>
       </div>
-      <Button onClick={() => navigate("/ride-history")}>History</Button>
-      <SearchRide />
-      Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ut rerum
-      voluptatum id! Dolore blanditiis, mollitia beatae quisquam officiis
-      ducimus expedita, veritatis minima eum tempore eaque quae rerum
-      accusantium iure excepturi dignissimos id omnis illo placeat! Magnam quas
-      voluptatem aspernatur, quae in, consequatur cupiditate, autem incidunt
-      perferendis rem cum? Laboriosam voluptate est necessitatibus magnam modi
-      quas maiores molestias beatae? Facilis corporis velit fugit necessitatibus
-      architecto nemo, commodi odio voluptates autem minima libero quas
-      repellendus iusto deserunt molestiae blanditiis ducimus, rerum eveniet,
-      sapiente vel. Ex, nesciunt repudiandae! Facere explicabo recusandae eius!
-      Molestias accusantium ipsum, quae perspiciatis dolorem exercitationem! Est
-      placeat vitae iste ipsam eius excepturi voluptate quasi perferendis
-      delectus quod, veritatis itaque voluptatem laboriosam. Aliquid
-      reprehenderit iusto accusamus delectus ad animi quasi amet recusandae
-      alias explicabo fugit iste placeat illum cupiditate facere odio voluptatum
-      ipsam, perspiciatis dolor. Doloribus nesciunt, sapiente amet architecto
-      quisquam atque ex qui non quasi cum veniam ratione hic quas natus tempore
-      aperiam maiores quae omnis ipsa ipsum facilis fuga iusto necessitatibus
-      expedita. Optio saepe adipisci earum assumenda obcaecati! Expedita
-      corrupti ex incidunt consectetur deserunt totam quaerat nulla reiciendis
-      molestias aspernatur, ab reprehenderit sapiente debitis neque odio rerum,
-      voluptates a iure ipsam non velit nostrum aut nemo rem. Quod, hic quaerat.
-      Eum eligendi, nostrum id accusantium quod libero placeat sit ad ullam
-      debitis necessitatibus illo est voluptate odio suscipit cum corporis
-      aspernatur hic. Aliquam laborum explicabo perspiciatis dolorum temporibus
-      quasi consectetur a, debitis facere accusamus minus placeat culpa eveniet
-      iusto velit in suscipit repellendus consequatur delectus exercitationem,
-      unde magnam eaque! Corporis eaque explicabo qui recusandae dolorum beatae
-      earum provident, dicta, fuga, consectetur nihil tempora animi hic ipsum
-      magni aut eum. Porro quam soluta enim voluptatum nulla quaerat, optio
-      doloribus cupiditate repellendus praesentium repellat totam ipsam! Itaque
-      ut modi aperiam nihil, asperiores neque, tempore quidem cupiditate
-      provident vero, consequuntur sapiente doloremque? Voluptatum maiores
-      placeat dolores, aut laboriosam repudiandae maxime cupiditate voluptatem
-      facilis. Dolor sequi quaerat pariatur consequatur obcaecati. Molestias
-      possimus praesentium rerum cupiditate et mollitia voluptas repellendus,
-      voluptatibus delectus placeat voluptate vitae ab velit temporibus sed
-      officiis nesciunt officia? Alias autem unde sit vero odio maxime non velit
-      sed blanditiis laborum harum sapiente a nobis tempora nihil excepturi, eos
-      dolor quas modi delectus! Earum culpa aperiam suscipit, repudiandae ipsum
-      dolores eligendi sequi neque, ducimus laborum fugit maiores, dolore nemo
-      nihil sint accusantium doloribus nesciunt aut molestias quis. Debitis
-      adipisci provident est magnam voluptas facere accusamus a corrupti
-      blanditiis, accusantium labore modi consequatur nesciunt laborum sapiente,
-      esse quia et in sint error nihil beatae exercitationem libero! Voluptatem,
-      nemo eligendi sapiente molestias iste iure ipsum cumque enim libero ullam,
-      temporibus consequatur explicabo corporis obcaecati accusamus numquam
-      recusandae quasi magnam vero vitae voluptate ad sunt optio consequuntur?
-      Aliquam dolorem, non vero officiis temporibus reiciendis numquam quos
-      illum impedit voluptates ratione sed neque dignissimos eligendi commodi
-      cumque dolorum ex cupiditate nostrum magnam quisquam. Voluptatibus quam,
-      quasi accusamus eaque dolores totam blanditiis. Praesentium laboriosam
-      voluptatem porro incidunt debitis harum voluptas necessitatibus, eum amet
-      adipisci repellat sapiente nihil, vero eaque animi itaque, fugit
-      reprehenderit culpa ea.
+      <div className="border rounded-md md:m-10 m-5 ">
+        <SearchRide />
+      </div>
+
+      <div className="flex flex-col lg:flex-row justify-between gap-5 md:m-14 m-6">
+        <Card className="w-full border-none">
+          <CardHeader>
+            <CardTitle>
+              <Sprout className="size-10 mx-3 -mb-2" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg my-2">Eco-friendly travel made easy</p>
+            <CardDescription>
+              Reduce your carbon footprint by carpooling! Every shared ride
+              helps the environment, and with our seamless platform, it’s easier
+              than ever to make a difference.
+            </CardDescription>
+          </CardContent>
+        </Card>
+        <Card className="w-full border-none">
+          <CardHeader>
+            <CardTitle>
+              <Hourglass className="size-9 mx-3 -mb-2" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg my-2">Get there faster, together</p>
+            <CardDescription>
+              Save time and avoid traffic by carpooling in HOV lanes. Our
+              platform connects you with other riders so you can take the
+              fastest routes available.
+            </CardDescription>
+          </CardContent>
+        </Card>
+        <Card className="w-full border-none">
+          <CardHeader>
+            <CardTitle>
+              <HandCoins className="size-10 mx-3 -mb-2" />
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-lg my-2">Save time, save money</p>
+            <CardDescription>
+              With our smart ride-sharing options, you can cut down on both
+              travel costs and time spent commuting. Share a ride with others
+              headed in the same direction, and enjoy the savings!
+            </CardDescription>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="flex md:flex-row flex-col items-center md:m-14 m-5 ">
+        <div className="w-full md:p-14 p-4 flex flex-col">
+          <h1 className="text-xl font-semibold my-4">Earn while you drive</h1>
+          <p className="text-gray-500 my-1">
+            Share your trip and offset your driving costs! By offering a ride,
+            you can earn rewards while helping others get where they need to go.
+          </p>
+          <Link
+            to="/create-ride"
+            className="self-center my-5 rounded-full bg-sky-500 hover:bg-sky-600 text-white duration-150 text-md py-3 px-4 font-semibold"
+          >
+            Offer a ride
+          </Link>
+        </div>
+        <div className="w-full">
+          <img src="/family3.png" alt="" className="h-52 mx-auto" />
+        </div>
+      </div>
+
+      <div className="md:m-14 m-10">
+        <h1 className="text-4xl font-semibold my-12 text-center">
+          Carpool Help Centre
+        </h1>
+        <div className="flex flex-col md:flex-row gap-16 my-5">
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              How do I book a carpool ride?
+            </h3>
+            <TruncatedDescription
+              description="You can book a carpool ride on our web application. Simply search
+              for your destination, choose the date you want to travel and pick
+              the carpool that suits you best! Rides can be booked instantly.
+              Either way, booking a carpool ride is fast, simple and easy."
+            />
+          </div>
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              How do I publish a carpool ride?
+            </h3>
+            <TruncatedDescription
+              description="Offering a carpool ride is easy. To publish your ride, juat
+              indicate your departure and arrival points, the date and time of
+              your departure, how many passengers you can take and the price per
+              seat.and you have the option of adding any important details you
+              think your passengers should know about. Then tap Create ride’ and
+              you’re done!"
+            />
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-16 my-5">
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              How do I cancel my carpool ride?
+            </h3>
+            <TruncatedDescription
+              description="If you have a change of plans, you can always cancel your carpool
+              ride from the ‘Your rides’ section of our app. The sooner you
+              cancel, the better. That way the driver has time to accept new
+              passengers."
+            />
+          </div>
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              What are the benefits of travelling by carpool?
+            </h3>
+            <TruncatedDescription
+              description="There are multiple advantages to carpooling, over other means of
+              transport. Travelling by carpool is usually more affordable,
+              especially for longer distances. Carpooling is also more
+              eco-friendly, as sharing a car means there will be fewer cars on
+              the road, and therefore fewer emissions. Taking a carpool ride is
+              also a safe way to travel in the current times. Because there are
+              only a few people in a car, you have fewer points of contact and
+              there’s less risk than other travel options."
+            />
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row gap-16 my-5">
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              How much does a carpool ride cost?
+            </h3>
+            <TruncatedDescription
+              description="The costs of a carpool ride can vary greatly, and depend on
+              factors like distance, time of departure, the demand of that ride
+              and more. It is also up to the driver to decide how much to charge
+              per seat, so it’s hard to put an exact price tag on a ride. Start
+              searching for your next carpool ride."
+            />
+          </div>
+          <div className="w-full">
+            <h3 className="my-3 font-semibold text-lg">
+              How do I start carpooling?
+            </h3>
+            <TruncatedDescription
+              description="Carpooling with us is super easy, and free! Simply sign up for an
+              account and tell us some basic details about yourself. Once you
+              have an account, you can start booking or publishing rides
+              directly on our website."
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
