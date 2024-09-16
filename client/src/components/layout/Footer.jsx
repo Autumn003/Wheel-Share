@@ -48,21 +48,21 @@ const Footer = () => {
         {/* Second Section: Social Media Links */}
         <div className="flex justify-center md:justify-end items-center space-x-4 mx-5">
           <Link
-            to=""
+            to="https://x.com/Hemantsh03"
             className="flex flex-col items-center hover:text-sky-500 duration-200 ease-in-out"
           >
             <Twitter />
             <p>Twitter</p>
           </Link>
           <Link
-            to=""
+            to="https://github.com/Autumn003"
             className="flex flex-col items-center hover:text-gray-500 duration-200 ease-in-out"
           >
             <Github />
             <p>GitHub</p>
           </Link>
           <Link
-            to=""
+            to="https://www.linkedin.com/in/hemant003"
             className="flex flex-col items-center hover:text-sky-700 duration-200 ease-in-out"
           >
             <Linkedin />

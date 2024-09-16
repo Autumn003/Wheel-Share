@@ -10,14 +10,11 @@ const configureSocket = (server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected");
-
     // Join a room for a specific conversation
     socket.on("joinRoom", ({ sender, receiver }) => {
       // Create a unique room ID based on sender and receiver IDs
       const room = [sender, receiver].sort().join("_");
       socket.join(room);
-      console.log(`User with ID ${sender} joined room ${room}`);
     });
 
     // Handle sending a message
@@ -38,9 +35,7 @@ const configureSocket = (server) => {
 
         // Emit the message to both sender and receiver's room
         io.to(room).emit("receiveMessage", message);
-      } catch (error) {
-        console.log("Error sending message: ", error);
-      }
+      } catch (error) {}
     });
 
     // Handle disconnection

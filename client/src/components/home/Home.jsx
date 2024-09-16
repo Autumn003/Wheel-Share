@@ -56,7 +56,7 @@ const Home = () => {
           />
         </AspectRatio>
       </div>
-      <div className="border rounded-md md:m-10 m-5 ">
+      <div className=" md:m-10 m-5 ">
         <SearchRide />
       </div>
 
@@ -108,7 +108,7 @@ const Home = () => {
         </Card>
       </div>
 
-      <div className="flex md:flex-row flex-col items-center md:m-14 m-5 ">
+      <div className="flex md:flex-row flex-col items-center md:px-14 px-5 bg-primary-foreground">
         <div className="w-full md:p-14 p-4 flex flex-col">
           <h1 className="text-xl font-semibold my-4">Earn while you drive</h1>
           <p className="text-gray-500 my-1">
