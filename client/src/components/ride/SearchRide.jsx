@@ -133,10 +133,15 @@ const SearchRide = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Search for Rides</h2>
-      <form onSubmit={handleSearch}>
+      <h2 className="text-2xl md:text-3xl font-semibold  mb-8 text-center">
+        Search for Rides
+      </h2>
+      <form
+        onSubmit={handleSearch}
+        className="border md:p-10 px-4 py-8 rounded-lg"
+      >
         <div className="mb-4" ref={sourceInputRef}>
-          <Label>Source Location</Label>
+          <Label className="text-lg">Source Location</Label>
           <Input
             type="text"
             name="sourceName"
@@ -165,7 +170,7 @@ const SearchRide = () => {
         </div>
 
         <div className="mb-4" ref={destinationInputRef}>
-          <Label>Destination Location</Label>
+          <Label className="text-lg">Destination Location</Label>
           <Input
             type="text"
             name="destinationName"
@@ -194,7 +199,7 @@ const SearchRide = () => {
         </div>
 
         <div className="mb-4 flex flex-col gap-1">
-          <Label>Search Date</Label>
+          <Label className="text-lg">Search Date</Label>
           <DatePicker
             onChange={(date) => {
               if (date) {
@@ -216,7 +221,7 @@ const SearchRide = () => {
         </div>
 
         <div className="mb-4">
-          <Label>Minimum Available Seats</Label>
+          <Label className="text-lg">Minimum Available Seats</Label>
           <Input
             type="number"
             name="miniAvailableSeats"
@@ -231,17 +236,20 @@ const SearchRide = () => {
             required
           />
         </div>
-
-        {loading ? (
-          <ButtonLoading />
-        ) : (
-          <Button type="submit">Search Ride</Button>
-        )}
+        <div className="text-center md:mt-16 md:mb-5 mt-10">
+          {loading ? (
+            <ButtonLoading />
+          ) : (
+            <Button type="submit">Search Ride</Button>
+          )}
+        </div>
       </form>
 
       {rides && rides.length > 0 && (
-        <div className="mt-4">
-          <h3 className="text-lg font-bold">Available Rides</h3>
+        <div className="md:mt-14 mt-8">
+          <h3 className="text-2xl md:text-3xl font-semibold  mb-8 text-center">
+            Available Rides
+          </h3>
           <div>
             {rides.map((ride) => (
               <Card

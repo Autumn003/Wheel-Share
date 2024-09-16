@@ -191,10 +191,15 @@ const CreateRide = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Create a New Ride</h2>
-      <form onSubmit={handleSubmit}>
+      <h2 className="text-2xl md:text-3xl font-semibold  mb-8 text-center">
+        Create a New Ride
+      </h2>
+      <form
+        onSubmit={handleSubmit}
+        className="border md:p-10 px-4 py-8 rounded-lg"
+      >
         <div className="mb-4" ref={sourceInputRef}>
-          <Label>Source Location</Label>
+          <Label className="text-lg">Source Location</Label>
           <Input
             type="text"
             name="sourceName"
@@ -225,7 +230,7 @@ const CreateRide = () => {
         </div>
 
         <div className="mb-4" ref={destinationInputRef}>
-          <Label>Destination Location</Label>
+          <Label className="text-lg">Destination Location</Label>
           <Input
             type="text"
             name="destinationName"
@@ -256,7 +261,7 @@ const CreateRide = () => {
         </div>
 
         <div className="mb-4 flex flex-col gap-1">
-          <Label>Departure Time</Label>
+          <Label className="text-lg">Departure Time</Label>
           <DateTimePicker
             value={formData.departureTime}
             onChange={(date) => {
@@ -266,7 +271,7 @@ const CreateRide = () => {
         </div>
 
         <div className="mb-4">
-          <Label>Available Seats</Label>
+          <Label className="text-lg">Available Seats</Label>
           <Input
             type="number"
             name="availableSeats"
@@ -276,7 +281,7 @@ const CreateRide = () => {
           />
         </div>
         <div className="mb-4">
-          <Label>Vehicle Type</Label>
+          <Label className="text-lg">Vehicle Type</Label>
           <Select
             value={formData.vehicleType}
             onValueChange={(value) =>
@@ -299,7 +304,7 @@ const CreateRide = () => {
         </div>
 
         <div className="mb-4">
-          <Label>Price</Label>
+          <Label className="text-lg">Price</Label>
           <Input
             type="number"
             name="price"
@@ -310,7 +315,7 @@ const CreateRide = () => {
         </div>
 
         <div className="mb-4">
-          <Label>Additional Information</Label>
+          <Label className="text-lg">Additional Information</Label>
           <Textarea
             name="additionalInfo"
             value={formData.additionalInfo}
@@ -321,11 +326,13 @@ const CreateRide = () => {
           />
         </div>
 
-        {loading ? (
-          <ButtonLoading />
-        ) : (
-          <Button type="submit">Create Ride</Button>
-        )}
+        <div className="text-center mt-16 mb-5">
+          {loading ? (
+            <ButtonLoading />
+          ) : (
+            <Button type="submit">Create Ride</Button>
+          )}
+        </div>
       </form>
 
       <Dialog open={showMap} onOpenChange={setShowMap}>

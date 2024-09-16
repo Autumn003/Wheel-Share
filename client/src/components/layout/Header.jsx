@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Login, Logout, Register } from "../index";
+import { CirclePlus, Search } from "lucide-react";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -25,8 +26,22 @@ const Header = () => {
     <>
       <div className="h-20 sticky top-0 z-50 flex justify-between p-4 items-center bg-[rgba(0,0,0,0.50)] shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[6.8px]">
         <div> Wheel Share </div>
-        <div className="flex justify-end space-x-4 w-[50%]">
-          <ModeToggle />
+        <div className="flex justify-end md:space-x-4 w-[50%]">
+          <Button
+            className="md:gap-1 hover:text-sky-500 duration-200 ease-in"
+            variant="ghost"
+            onClick={() => navigate("/search-ride")}
+          >
+            <Search /> <span className="md:block hidden">Search Ride</span>
+          </Button>
+          <Button
+            className="md:gap-1 hover:text-sky-500 duration-200 ease-in"
+            variant="ghost"
+            onClick={() => navigate("/create-ride")}
+          >
+            <CirclePlus /> <span className="md:block hidden">Create Ride</span>
+          </Button>
+          <ModeToggle className="p-4" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="link" size="icon">
