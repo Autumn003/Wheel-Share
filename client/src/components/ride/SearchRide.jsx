@@ -12,6 +12,8 @@ import { DatePicker } from "../ui/date-picker.jsx";
 import { GitCommitHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 const libraries = ["places"];
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -49,7 +51,7 @@ const SearchRide = () => {
   const handleLocationSearch = async (query, type) => {
     try {
       const response = await axios.get(
-        `/api/v1/map/place/autocomplete?input=${query}`
+        `${apiUrl}/api/v1/map/place/autocomplete?input=${query}`
       );
       if (type === "source") {
         setSourceSuggestions(response.data.predictions);
@@ -64,7 +66,7 @@ const SearchRide = () => {
   const handleSuggestionClick = async (placeId, type) => {
     try {
       const response = await axios.get(
-        `/api/v1/map/place/details?placeId=${placeId}`
+        `${apiUrl}/api/v1/map/place/details?placeId=${placeId}`
       );
       const location = response.data.result.geometry.location;
       const address = response.data.result.formatted_address;
