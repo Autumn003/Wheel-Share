@@ -1,12 +1,17 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
+
 // login user
 export const loginUser = createAsyncThunk(
   "user/login",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/user/login", userData);
+      const response = await axios.post(
+        `${apiUrl}/api/v1/user/login`,
+        userData
+      );
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -23,7 +28,10 @@ export const registerUser = createAsyncThunk(
   "user/register",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/user/register", userData);
+      const response = await axios.post(
+        `${apiUrl}/api/v1/user/register`,
+        userData
+      );
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -40,7 +48,7 @@ export const logoutUser = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/user/logout");
+      const response = await axios.post(`${apiUrl}/api/v1/user/logout`);
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -57,7 +65,7 @@ export const fetchUser = createAsyncThunk(
   "user/fetchUser",
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await axios.get("/api/v1/user/profile", {
+      const response = await axios.get(`${apiUrl}/api/v1/user/profile`, {
         withCredentials: true,
       });
       return response.data.data;
@@ -89,9 +97,12 @@ export const forgetPassword = createAsyncThunk(
   "user/forgetPassword",
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axios.post("/api/v1/user/forgot-password", {
-        email,
-      });
+      const response = await axios.post(
+        `${apiUrl}/api/v1/user/forgot-password`,
+        {
+          email,
+        }
+      );
 
       return response.data.data;
     } catch (error) {
@@ -106,7 +117,7 @@ export const resetPassword = createAsyncThunk(
   async ({ token, userData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `/api/v1/user/reset-password/${token}`,
+        `${apiUrl}/api/v1/user/reset-password/${token}`,
         userData
       );
       return response.data.data;
@@ -121,9 +132,13 @@ export const updateUser = createAsyncThunk(
   "user/updateUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/api/v1/user/update-user", userData, {
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        `${apiUrl}/api/v1/user/update-user`,
+        userData,
+        {
+          withCredentials: true,
+        }
+      );
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -140,12 +155,16 @@ export const updateUserAvatar = createAsyncThunk(
   "user/updateUserAvatar",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.put("/api/v1/user/update-avatar", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      });
+      const response = await axios.put(
+        `${apiUrl}/api/v1/user/update-avatar`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
       return response.data.data;
     } catch (error) {
       if (error.response && error.response.data) {
@@ -163,7 +182,7 @@ export const updatePassword = createAsyncThunk(
   async (passwordData, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        "/api/v1/user/update-password",
+        `${apiUrl}/api/v1/user/update-password`,
         passwordData,
         {
           withCredentials: true,
