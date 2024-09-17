@@ -25,7 +25,9 @@ const Header = () => {
   return (
     <>
       <div className="h-20 sticky top-0 z-50 flex justify-between p-4 items-center bg-[rgba(0,0,0,0.50)] shadow-[0_4px_30px_rgba(0,0,0,0.1)] backdrop-blur-[6.8px]">
-        <div> Wheel Share </div>
+        <div>
+          <img src="/logo.png" alt="" className="h-32" />
+        </div>
         <div className="flex justify-end md:space-x-4 w-[50%]">
           <Button
             className="md:gap-1 hover:text-sky-500 duration-200 ease-in"

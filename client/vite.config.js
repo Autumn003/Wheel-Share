@@ -4,6 +4,9 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  build: {
+    sourcemap: false,
+  },
   plugins: [react()],
   resolve: {
     alias: {
@@ -13,7 +16,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8000",
+        target: "https://wheel-share.onrender.com",
         changeOrigin: true,
         secure: false,
       },
