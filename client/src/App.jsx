@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 
 import { fetchUser } from "./actions/user.action.js";
-
 import {
   Conversations,
   CreateRide,
@@ -33,20 +37,36 @@ function App() {
   return (
     <Router>
       <Header />
-      <Routes>
-        <Route path="/profile" Component={Profile} />
-        <Route path="/" Component={Home} />
-        <Route path="/reset-password/:token" Component={ResetPassword} />
-        <Route path="/search-ride" Component={SearchRide} />
-        <Route path="/create-ride" Component={CreateRide} />
-        <Route path="/ride/:id" Component={RideDetails} />
-        <Route path="/ride-history" Component={RideHistory} />
-        <Route path="/messages/:userId" Component={Messaging} />
-        <Route path="/inbox" Component={Conversations} />
-      </Routes>
-      <Footer />
+      <MainContent />
       <Toaster />
     </Router>
+  );
+}
+
+function MainContent() {
+  const location = useLocation();
+
+  // Check if the current path is not the messaging page
+  const showFooter = !(
+    location.pathname.startsWith("/messages") ||
+    location.pathname.startsWith("/inbox")
+  );
+
+  return (
+    <>
+      <Routes>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/search-ride" element={<SearchRide />} />
+        <Route path="/create-ride" element={<CreateRide />} />
+        <Route path="/ride/:id" element={<RideDetails />} />
+        <Route path="/ride-history" element={<RideHistory />} />
+        <Route path="/inbox" element={<Conversations />} />
+        <Route path="/messages/:userId" element={<Messaging />} />
+      </Routes>
+      {showFooter && <Footer />}
+    </>
   );
 }
 

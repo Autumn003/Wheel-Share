@@ -45,7 +45,9 @@ export const fetchConversations = createAsyncThunk(
   "conversations/fetchConversations",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/api/v1/message`);
+      const response = await axios.get(`${apiUrl}/api/v1/message`, {
+        withCredentials: true,
+      });
       return response.data.data;
     } catch (error) {
       console.log(error);
