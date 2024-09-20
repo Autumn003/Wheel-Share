@@ -8,6 +8,7 @@ const app = express();
 app.use(
   cors({
     origin: process.env.CORS_ORIGIN,
+    secure: process.env.NODE_ENV === "production",
     credentials: true,
   })
 );
