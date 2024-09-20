@@ -75,14 +75,17 @@ export const fetchUser = createAsyncThunk(
       if (error.response && error.response.status === 401) {
         // If access token is expired, try refreshing it
         try {
-          await axios.get("/api/v1/user/refresh-token", {
+          await axios.get(`${apiUrl}/api/v1/user/refresh-token`, {
             withCredentials: true,
           });
 
           // Retry fetching user details with the new token
-          const retryResponse = await axios.get("/api/v1/user/profile", {
-            withCredentials: true,
-          });
+          const retryResponse = await axios.get(
+            `${apiUrl}/api/v1/user/profile`,
+            {
+              withCredentials: true,
+            }
+          );
           return retryResponse.data.data;
         } catch (refreshError) {
           return rejectWithValue("Session expired, please log in again");
