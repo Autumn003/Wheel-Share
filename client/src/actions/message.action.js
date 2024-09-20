@@ -6,7 +6,9 @@ export const fetchMessages = createAsyncThunk(
   "messages/fetchMessages",
   async (userId, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${apiUrl}/api/v1/message/${userId}`);
+      const response = await axios.get(`${apiUrl}/api/v1/message/${userId}`, {
+        withCredentials: true,
+      });
       console.log("Fetched messages:", response.data); // Log the fetched messages
       return response.data; // Return the fetched messages to be added to Redux state
     } catch (error) {
@@ -21,7 +23,10 @@ export const sendMessage = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/api/v1/message/send`,
-        messageData
+        messageData,
+        {
+          withCredentials: true,
+        }
       );
       console.log(response.data); // Check if it's a single message object
       return response.data;
