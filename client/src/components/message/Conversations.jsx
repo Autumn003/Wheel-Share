@@ -2,6 +2,7 @@ import { fetchConversations } from "@/actions/message.action";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { ErrorPage, Loader } from "../index.js";
 
 const Conversations = () => {
   const dispatch = useDispatch();
@@ -13,8 +14,8 @@ const Conversations = () => {
     dispatch(fetchConversations());
   }, [dispatch]);
 
-  if (loading) return <div>Loading conversations...</div>;
-  if (error) return <div>Error loading conversations</div>;
+  if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   return (
     <div className="p-4">

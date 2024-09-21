@@ -19,9 +19,11 @@ import { createRide } from "../../actions/ride.action";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../timePicker/date-time-picker";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../index.js";
 
 const libraries = ["places"];
 
+const apiUrl = import.meta.env.VITE_BACKEND_URL;
 const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 const CreateRide = () => {
@@ -78,7 +80,7 @@ const CreateRide = () => {
   const reverseGeocode = async (lat, lng, locationType) => {
     try {
       const response = await axios.get(
-        `/api/v1/map/geocode?latlng=${lat},${lng}`
+        `${apiUrl}/api/v1/map/geocode?latlng=${lat},${lng}`
       );
       const address =
         response.data.results[0]?.formatted_address || "Unknown location";
@@ -106,7 +108,7 @@ const CreateRide = () => {
   const handleLocationSearch = async (query, type) => {
     try {
       const response = await axios.get(
-        `/api/v1/map/place/autocomplete?input=${query}`
+        `${apiUrl}/api/v1/map/place/autocomplete?input=${query}`
       );
       if (type === "source") {
         setSourceSuggestions(response.data.predictions);
@@ -121,7 +123,7 @@ const CreateRide = () => {
   const handleSuggestionClick = async (placeId, type) => {
     try {
       const response = await axios.get(
-        `/api/v1/map/place/details?placeId=${placeId}`
+        `${apiUrl}/api/v1/map/place/details?placeId=${placeId}`
       );
       const location = response.data.result.geometry.location;
       const address = response.data.result.formatted_address;
@@ -187,7 +189,7 @@ const CreateRide = () => {
     };
   }, []);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <Loader />;
 
   return (
     <div className="p-6">

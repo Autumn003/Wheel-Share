@@ -8,6 +8,7 @@ import {
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
+import { ErrorPage, Loader } from "../index.js";
 
 let socket;
 
@@ -70,8 +71,8 @@ const Messaging = () => {
     }
   };
 
-  if (loading) return <div>Loading messages...</div>;
-  if (error) return <div>Error loading messages</div>;
+  if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   return (
     <div className="flex flex-col rounded-lg shadow-lg ">

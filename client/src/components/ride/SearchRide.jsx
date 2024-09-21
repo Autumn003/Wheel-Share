@@ -11,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DatePicker } from "../ui/date-picker.jsx";
 import { GitCommitHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../index.js";
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -131,7 +132,7 @@ const SearchRide = () => {
     };
   }, []);
 
-  if (!isLoaded) return <div>Loading...</div>;
+  if (!isLoaded) return <Loader />;
 
   return (
     <div className="p-6">

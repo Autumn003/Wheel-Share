@@ -13,6 +13,8 @@ import RideHistory from "./ride/RideHistory";
 import Messaging from "./message/Messaging";
 import Conversations from "./message/Conversations";
 import Footer from "./layout/Footer";
+import Loader from "./layout/Loader";
+import ErrorPage from "./layout/ErrorPage";
 
 export {
   Profile,
@@ -30,4 +32,6 @@ export {
   Messaging,
   Conversations,
   Footer,
+  Loader,
+  ErrorPage,
 };

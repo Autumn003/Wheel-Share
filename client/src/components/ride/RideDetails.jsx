@@ -52,6 +52,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "../ui/alert-dialog.jsx";
+import { ErrorPage, Loader } from "../index.js";
 
 const RideDetails = () => {
   const dispatch = useDispatch();
@@ -148,12 +149,8 @@ const RideDetails = () => {
     (rider) => rider.rider._id === loggedInUser?._id
   );
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <p className="self-center">Something went wrong</p>;
-  }
+  if (loading) return <Loader />;
+  if (error) return <ErrorPage />;
 
   return (
     <>

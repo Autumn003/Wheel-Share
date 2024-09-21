@@ -62,6 +62,12 @@ const Header = () => {
                   <DropdownMenuItem onClick={() => navigate("profile")}>
                     Profile
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("inbox")}>
+                    Inbox
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("ride-history")}>
+                    Your-Rides
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => setIsLogoutOpen(true)}>
                     Logout
                   </DropdownMenuItem>
