@@ -19,7 +19,7 @@ import { createRide } from "../../actions/ride.action";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../timePicker/date-time-picker";
 import { useNavigate } from "react-router-dom";
-import { Loader } from "../index.js";
+import { Loader, MetaData } from "../index.js";
 
 const libraries = ["places"];
 
@@ -193,6 +193,7 @@ const CreateRide = () => {
 
   return (
     <div className="p-6">
+      <MetaData title="Share your carpool ride | Wheel Share" />
       <h2 className="text-2xl md:text-3xl font-semibold  mb-8 text-center">
         Create a New Ride
       </h2>

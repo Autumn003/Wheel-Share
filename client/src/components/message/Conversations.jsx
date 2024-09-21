@@ -2,7 +2,7 @@ import { fetchConversations } from "@/actions/message.action";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { ErrorPage, Loader } from "../index.js";
+import { ErrorPage, Loader, MetaData } from "../index.js";
 
 const Conversations = () => {
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ const Conversations = () => {
 
   return (
     <div className="p-4">
+      <MetaData title="Inbox | Wheel Share" />
       {conversations.map((conversation) => {
         const isUserReceiver = conversation._id.receiver === user._id;
         const chatPartnerId = isUserReceiver

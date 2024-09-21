@@ -21,6 +21,7 @@ import { ButtonLoading } from "../ui/loading-button";
 import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getRideDetails } from "@/actions/ride.action";
+import { MetaData } from "..";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -112,6 +113,7 @@ const Profile = () => {
 
   return (
     <>
+      <MetaData title="Your profile | Wheel Share" />
       <div className="m-10">
         <div className="p-5 md:flex-row flex shadow-lg rounded-lg md:justify-between flex-col justify-center ">
           <div className="flex flex-col items-center">

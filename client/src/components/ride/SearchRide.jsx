@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { DatePicker } from "../ui/date-picker.jsx";
 import { GitCommitHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Loader } from "../index.js";
+import { Loader, MetaData } from "../index.js";
 
 const apiUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -136,6 +136,7 @@ const SearchRide = () => {
 
   return (
     <div className="p-6">
+      <MetaData title="Find your ride | Wheel Share" />
       <h2 className="text-2xl md:text-3xl font-semibold  mb-8 text-center">
         Search for Rides
       </h2>

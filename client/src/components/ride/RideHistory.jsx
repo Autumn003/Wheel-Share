@@ -3,6 +3,7 @@ import { fetchUser } from "@/actions/user.action";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { MetaData } from "..";
 
 const RideHistory = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ const RideHistory = () => {
 
   return (
     <>
+      <MetaData title="Your previous rides | Wheel Share" />
       <div className="m-5">
         <h2 className="text-2xl font-semibold">Rides History</h2>
         <div className="mt-5">

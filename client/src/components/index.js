@@ -15,6 +15,7 @@ import Conversations from "./message/Conversations";
 import Footer from "./layout/Footer";
 import Loader from "./layout/Loader";
 import ErrorPage from "./layout/ErrorPage";
+import MetaData from "./layout/MetaData";
 
 export {
   Profile,
@@ -34,4 +35,5 @@ export {
   Footer,
   Loader,
   ErrorPage,
+  MetaData,
 };

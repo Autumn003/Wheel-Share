@@ -52,7 +52,7 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
 } from "../ui/alert-dialog.jsx";
-import { ErrorPage, Loader } from "../index.js";
+import { ErrorPage, Loader, MetaData } from "../index.js";
 
 const RideDetails = () => {
   const dispatch = useDispatch();
@@ -154,6 +154,7 @@ const RideDetails = () => {
 
   return (
     <>
+      <MetaData title="Ride details | Wheel Share" />
       <Card className="md:mx-10 md:mt-10 rounded-none md:rounded-lg">
         <CardHeader>
           <CardTitle className="self-center mb-8">

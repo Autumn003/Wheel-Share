@@ -8,7 +8,7 @@ import {
 import io from "socket.io-client";
 import { useParams } from "react-router-dom";
 import { Send } from "lucide-react";
-import { ErrorPage, Loader } from "../index.js";
+import { ErrorPage, Loader, MetaData } from "../index.js";
 
 let socket;
 
@@ -76,6 +76,7 @@ const Messaging = () => {
 
   return (
     <div className="flex flex-col rounded-lg shadow-lg ">
+      <MetaData title="Chat | Wheel Share" />
       {/* Messages container */}
       <div className="flex flex-col space-y-4 overflow-auto mb-4 chat-background scrollbar-hide p-4 rounded-lg shadow-inner min-h-96 h-full">
         {messages?.map((message, index) => {

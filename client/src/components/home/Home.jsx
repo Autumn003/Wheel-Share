@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { SearchRide } from "..";
+import { MetaData, SearchRide } from "..";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "../ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -35,7 +33,7 @@ const TruncatedDescription = ({ description }) => {
     <div>
       <p className="text-gray-500">{renderDescription()}</p>
       {description.split(" ").length > 20 && (
-        <button className="text-blue-500 " onClick={toggleDescription}>
+        <button className="text-blue-500" onClick={toggleDescription}>
           {isExpanded ? "Read less" : "Read more"}
         </button>
       )}
@@ -44,9 +42,9 @@ const TruncatedDescription = ({ description }) => {
 };
 
 const Home = () => {
-  const navigate = useNavigate();
   return (
     <>
+      <MetaData title="Wheel Share" />
       <div className="md:h-60 h-28">
         <AspectRatio ratio={4 / 1}>
           <img
