@@ -2,7 +2,7 @@ import { getRideDetails } from "@/actions/ride.action";
 import { fetchUser } from "@/actions/user.action";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MetaData } from "..";
 
 const RideHistory = () => {
@@ -55,7 +55,27 @@ const RideHistory = () => {
                 ))}
               </div>
             ) : (
-              <p>No rides published yet.</p>
+              <>
+                <div className="flex flex-col items-center justify-center md:h-56 lg:h-96 h-24">
+                  <h3 className="text-secondary text-xl font-semibold my-10">
+                    No rides in your history. Create or join a new ride.
+                  </h3>
+                  <div className="space-x-4">
+                    <Link
+                      to="/create-ride"
+                      className="self-center my-5 rounded-full bg-sky-500 hover:bg-sky-600 text-white duration-150 text-md py-3 px-4 font-semibold"
+                    >
+                      Create Ride
+                    </Link>
+                    <Link
+                      to="/search-ride"
+                      className="self-center my-5 rounded-full bg-sky-500 hover:bg-sky-600 text-white duration-150 text-md py-3 px-4 font-semibold"
+                    >
+                      Search Ride
+                    </Link>
+                  </div>
+                </div>
+              </>
             )}
           </div>
         </div>

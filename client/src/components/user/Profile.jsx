@@ -334,7 +334,11 @@ const Profile = () => {
                   ))}
               </div>
             ) : (
-              <p>No rides published yet.</p>
+              <div className="flex items-center justify-center md:h-56 h-24">
+                <h3 className="text-secondary text-xl font-semibold">
+                  No rides published yet.
+                </h3>
+              </div>
             )}
           </div>
         </div>
