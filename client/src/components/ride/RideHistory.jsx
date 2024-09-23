@@ -19,6 +19,10 @@ const RideHistory = () => {
     }
   };
 
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
+
   return (
     <>
       <MetaData title="Your previous rides | Wheel Share" />
