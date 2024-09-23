@@ -50,7 +50,13 @@ export const logoutUser = createAsyncThunk(
   "user/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/api/v1/user/logout`);
+      const response = await axios.post(
+        `${apiUrl}/api/v1/user/logout`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
       return;
     } catch (error) {
       if (error.response && error.response.data) {
