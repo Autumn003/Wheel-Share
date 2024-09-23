@@ -8,7 +8,8 @@ export const createRide = createAsyncThunk(
     try {
       const response = await axios.post(
         `${apiUrl}/api/v1/ride/create-ride`,
-        rideData
+        rideData,
+        { withCredentials: true }
       );
       return response.data.data;
     } catch (error) {
@@ -26,7 +27,8 @@ export const deleteRide = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.delete(
-        `${apiUrl}/api/v1/ride/delete-ride/${id}`
+        `${apiUrl}/api/v1/ride/delete-ride/${id}`,
+        { withCredentials: true }
       );
       return response.data.data;
     } catch (error) {
@@ -82,7 +84,8 @@ export const joinRide = createAsyncThunk(
         `${apiUrl}/api/v1/ride/${id}/join-ride`,
         {
           seatsToBook,
-        }
+        },
+        { withCredentials: true }
       );
       return response.data.data;
     } catch (error) {
@@ -101,7 +104,12 @@ export const leaveRide = createAsyncThunk(
   "rideDetails/leaveRide",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.post(`${apiUrl}/api/v1/ride/${id}/leave`);
+      const response = await axios.post(
+        `${apiUrl}/api/v1/ride/${id}/leave`,
+        {},
+        { withCredentials: true }
+      );
+
       return response.data.data;
     } catch (error) {
       console.log(error);
@@ -121,7 +129,8 @@ export const updateRide = createAsyncThunk(
     try {
       const response = await axios.put(
         `${apiUrl}/api/v1/ride/update-ride/${id}`,
-        formData
+        formData,
+        { withCredentials: true }
       );
       return response.data.data;
     } catch (error) {
@@ -144,7 +153,8 @@ export const updateSeats = createAsyncThunk(
         `${apiUrl}/api/v1/ride/${id}/update-seats`,
         {
           newSeatsToBook,
-        }
+        },
+        { withCredentials: true }
       );
       return response.data.data;
     } catch (error) {
